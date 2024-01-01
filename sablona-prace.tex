@@ -29,7 +29,11 @@
 \usepackage{graphicx} % Balíček 'graphicx' pro vkládání obrázků
 											% Nutné pro vložení logotypů školy a fakulty
 \usepackage{tikz}
-\usetikzlibrary{shapes,arrows,positioning}
+\usetikzlibrary{shapes, arrows, calc, positioning}
+
+\usepackage[
+  obeyspaces
+]{url}
 
 \usepackage{float}
 
@@ -175,7 +179,7 @@
 % Vysázení stránky s rozšířeným abstraktem
 % (pokud píšete práci v češtině či slovenštině, vložení rozšířeného abstraktu zrušte;
 %  pro semestrální projekt také není potřeba rozšířený abstrakt uvádět)
-\input{text/rozsireny_abstrakt}
+% \input{text/rozsireny_abstrakt}
 
 %%% Vysázení citace práce
 \makecitation
