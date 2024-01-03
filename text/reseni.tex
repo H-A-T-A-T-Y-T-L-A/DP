@@ -1,12 +1,12 @@
 \chapter{Detekcia objektov v obraze}
 
-    Pre niektoré techniky klasifikácie objektov je nutné najprv v obraze tieto objekty nájsť. Existuje k tomu veľké množstvo metodík, pri čom každá z nich má svoje výhody a nevýody. Je teda nutnosťou zistiť ktorá metóda najviac vyhovuje použitiu pre túto prácu.
+    Pre niektoré techniky klasifikácie objektov je nutné najprv v obraze tieto objekty nájsť. Existuje k tomu veľké množstvo metodík, pri čom každá z nich má svoje výhody a nevýody. Je teda nutnosťou zistiť, ktorá metóda najviac vyhovuje použitiu pre túto prácu.
 
 \section{Prahovanie}
 
-    Prahovanie je jasová transformácia pri ktorej je šedotónový obraz rozdelený na dve a viac oblastí podľa jasovej úrovne pixelov. O tom, do ktorej z oblastí je daný pixel priradený rozhoduje prah, ktorého hodnotu je treba určiť. Výsledkom je obraz s len dvomi úrovňami jasu - binárny obraz.
+    Prahovanie je jasová transformácia, pri ktorej je šedotónový obraz rozdelený na dve a viac oblastí podľa jasovej úrovne pixelov. O tom, do ktorej z oblastí je daný pixel priradený rozhoduje prah, ktorého hodnotu je treba určiť. Výsledkom je obraz s len dvomi úrovňami jasu - binárny obraz.
 
-    Pri správnom predspracovaní obrazu prahovaním, je možné v ňom jednoducho oddeliť objekty od pozadia, v prípade ak sa jas objektu dostatočne lýši od jasu pozadia. Ak sa však jasové hodnoty objektu a pozadia príliš podobajú, nemusí existovať dostatočne robustné určenie prahu oddeľujúceho objekty od pozadia.
+    Pri správnom predspracovaní obrazu prahovaním je možné v ňom jednoducho oddeliť objekty od pozadia, v~prípade ak sa jas objektu dostatočne lýši od jasu pozadia. Ak sa však jasové hodnoty objektu a pozadia príliš podobajú, nemusí existovať dostatočne robustné určenie prahu oddeľujúceho objekty od pozadia. \cite{Morse1998/1} \cite{Buhl2023}
 
     \begin{figure}[!ht]
         \begin{center}
@@ -17,16 +17,16 @@
 
 \subsection{Globálne prahovanie}
 
-    Globálne prahovanie je často používaná technika pri ktorej je použítý jediný prah na celý obraz, čo nemusí byť vhodné v prípade ak je jasová úroveň pozadia rôzna v rôznych miestach obrazu.
+    Globálne prahovanie je často používaná technika, pri ktorej je použítý jediný prah na celý obraz, čo nemusí byť vhodné v~prípade, ak je jasová úroveň pozadia rôzna v~rôznych miestach obrazu. \cite{Morse1998/1}
 
     \begin{itemize}
-        \item \textbf{Jednoduché prahovanie} je technika pri ktorej je globálny prah určený dopredu ručne. V prípade že sa jasová úroveň pozadia v čase mení, je vhodnejšie použiť techniky s adaptívnym nastavením prahu.
+        \item \textbf{Jednoduché prahovanie} je technika, pri ktorej je globálny prah určený dopredu ručne. V prípade, že sa jasová úroveň pozadia v čase mení, je vhodnejšie použiť techniky s adaptívnym nastavením prahu.
 
-        \item Prahovanie \textbf{podľa známeho rozloženia} predpokladá že poznáme relatívnu veľkosť oblasti ktorú zaberá pozadie v obraze. Ak vieme že objekt je svetlejší ako pozadie, môžeme určiť prah z kumulatívneho histogramu tak, aby relatívny počet pixelov pod úrovňou prahu bol rovnaký ako oblasť ktorú ma zaberať pozadie.
+        \item Prahovanie \textbf{podľa známeho rozloženia} predpokladá že poznáme relatívnu veľkosť oblasti, ktorú zaberá pozadie v obraze. Ak vieme, že objekt je svetlejší ako pozadie, môžeme určiť prah z kumulatívneho histogramu tak, aby relatívny počet pixelov pod úrovňou prahu bol rovnaký ako oblasť, ktorú má zaberať pozadie.
 
-        \item Algoritmus \textbf{K-Means} (K priemerov) pre zhlukovú analýzu, rozdeľuje dáta do skupín s cieľom minimalizovať vzdialenosť bodov v zhluku a maximalizovať vzdialenosť medzi zhlukmi. Jedná sa o algorytmus učenia bez učiteľa. Funguje na princípe iterovaného posúvania \emph{k} stredov zhlukov (v prípade binárneho prahovania je \emph{k = 2}), smerom k priemeru hodnôt priradenému danému stredu v aktuálnom kroku.
+        \item Algoritmus \textbf{K-Means} (K priemerov) pre zhlukovú analýzu rozdeľuje dáta do skupín s cieľom minimalizovať vzdialenosť bodov v zhluku a maximalizovať vzdialenosť medzi zhlukmi. Jedná sa o algoritmus učenia bez učiteľa. Funguje na princípe iterovaného posúvania \emph{k} stredov zhlukov (v prípade binárneho prahovania je \emph{k = 2}) smerom k priemeru hodnôt priradenému danému stredu v aktuálnom kroku.
 
-        \item \textbf{Otsuova metóda} automatického určenia prahu je založená na maximalizovaní vzájomnej odchýlky medzi triedami. Využíva normalizovaný kumulatívny histogram z ktorého určuje vzájomnú rozptyl pre všetky možné hodnoty prahu a vyberá ten optimálny. 
+        \item \textbf{Otsuova metóda} automatického určenia prahu je založená na maximalizovaní vzájomnej odchýlky medzi triedami. Využíva normalizovaný kumulatívny histogram, z ktorého určuje vzájomný rozptyl pre všetky možné hodnoty prahu a vyberá ten optimálny.
     \end{itemize}
 
     \begin{figure}[!ht]
@@ -73,7 +73,7 @@
 
 \subsection{Lokálne prahovanie}
 
-    V prípade že je jas pozadia rôzny v rôznych častiač obrazu, je vhodné určiť hodnotu prahu z jasovej úrovne okolia každého prahovaného pixelu. Toto takzvané adaptívne prahovanie, má síce vyžšiu výpočetnú náročnosť ako jednoduchšie globálne prahovanie, keďže je nutné určiť prah pre každý bod obrazu samostatne, je však robustnejšie voči nevhodnému pozadiu.
+    V prípade, že je jas pozadia rôzny v rôznych častiač obrazu, je vhodné určiť hodnotu prahu z jasovej úrovne okolia každého prahovaného pixelu. Toto takzvané adaptívne prahovanie má síce vyššiu výpočtovú náročnosť ako jednoduchšie globálne prahovanie, keďže je nutné určiť prah pre každý bod obrazu samostatne, je však robustnejšie voči nevhodnému pozadiu. \cite{Buhl2023}
 
     \begin{figure}[!ht]
         \centering
@@ -92,9 +92,9 @@
 
 \section{Detekcia hrán}
 
-    Ako jednu z metód vyhľadávania objektov v obraze je možné využiť obraz hrán a vyhľadať v ňom kontúry objektov. Opäť existuje niekoľko spôsobov ako získať obraz hrán a ako ho využiť k segmentácii obrazu, teda k detekcii objektov.
+    Ako jednu z metód vyhľadávania objektov v obraze je možné využiť obraz hrán a~vyhľadať v ňom kontúry objektov. Opäť existuje niekoľko spôsobov ako získať obraz hrán a ako ho využiť k segmentácii obrazu, teda k detekcii objektov.
 
-    Na vytvorenie obrazu hrán z nasnímaného obrazu sa používa konvolúcia obrazu s operátorom navrhnutým tak aby aproximovalo deriváciu určitého rádu. Medzi často používané operátory patria Prewittov a Sobelov operátor, ktoré aproximujú prvú deriváciu v určitom smere (horizontálnom, vertikálnom, diagonálne). Druhú deriváciu aproximuje Laplaceov operátor, používa sa tiež v kombinácii s Gaussovým filtrom (LoG operátor), čo má za následok zníženie citlivosti na šum.
+    Na vytvorenie obrazu hrán z nasnímaného obrazu sa používa konvolúcia obrazu s operátorom navrhnutým tak aby aproximovalo deriváciu určitého rádu. Medzi často používané operátory patria Prewittov a Sobelov operátor, ktoré aproximujú prvú deriváciu v určitom smere (horizontálnom, vertikálnom, diagonálne). Druhú deriváciu aproximuje Laplaceov operátor, používa sa tiež v kombinácii s Gaussovým filtrom (LoG operátor), čo má za následok zníženie citlivosti na šum. \cite{Samina2023}
 
     % konvolučné operátory - hranové detektory
     \begin{figure}[!ht]
@@ -151,12 +151,12 @@
         \end{minipage}
     \end{figure}
 
-    Komplexnejšiou metódou detekcie hrán je takzvaný \emph{Cannyho hranový detektor}. Ide o proces vo viacerých krokoch, pre jeden vstupný obraz sa postupuje nasledovne:
+    Komplexnejšou metódou detekcie hrán je takzvaný \emph{Cannyho hranový detektor}. Ide o proces vo viacerých krokoch \cite{Samina2023}. Pre jeden vstupný obraz sa postupuje nasledovne:
 
     \begin{enumerate}
-        \item Vstupný obraz býva väčšinou filtrovaný z dôvodu zníženia citlivosti na šum v obraze. Vhodné je k tomu napríklad Gaussove rozmazanie.
+        \item Vstupný obraz býva väčšinou filtrovaný z dôvodu zníženia citlivosti na šum v~obraze. Vhodné je k tomu napríklad Gaussove rozmazanie.
         
-        \item Použije sa horizontálny a vertikálny Sobelov operátor ako detektor hrán, na získanie obrazu hrán v oboch smeroch \(I_{x}\) a \(I_{y}\).
+        \item Použije sa horizontálny a vertikálny Sobelov operátor ako detektor hrán~na získanie obrazu hrán v oboch smeroch \(I_{x}\) a \(I_{y}\).
 
         \begin{minipage}[b]{0.4\textwidth}
             \[I_{x} = 
@@ -189,7 +189,7 @@
             \[\theta = atan2(I_x, I_y)\]
         \end{minipage}
         
-        \item Ku zníženiu redundancie detekovaných hrán sa použije algorytmus \emph{non maxima suppression} (potlačenie nemaximálnej hodnoty). Použitím tohoto algorytmu dôjde k zúženiu hrán, pričom sa ponechajú len tie časti hrán ktorých magnitúda je väčšia ako v ich okolí.
+        \item Ku zníženiu redundancie detekovaných hrán sa použije algoritmus \emph{non maxima suppression} (potlačenie nemaximálnej hodnoty). Použitím tohoto algoritmu dôjde k zúženiu hrán, pričom sa ponechajú len tie časti hrán, ktorých magnitúda je väčšia ako v ich okolí.
         
         \item Dvojitým prahovaním sa v obraze hrán nájdu tri úrovne:
             \begin{itemize}
@@ -227,13 +227,13 @@
         \caption{Cannyho hranový detektor}
     \end{figure}
 
-    Obraz hrán je možné ďalej spracovávať, napríklad morfologickýmy operáciami: otvorením odstrániť krátke nevýznamné hrany, zatvorením spojiť hrany blízko pri sebe.
+    Obraz hrán je možné ďalej spracovávať napríklad morfologickými operáciami: otvorením odstrániť krátke nevýznamné hrany, zatvorením spojiť hrany blízko pri sebe.
 
-    Vyhľadávaním uzavertých kontúr v obraze hrán je možné identifikovať potenciálne objekty v obraze.
+    Vyhľadávaním uzavretých kontúr v obraze hrán je možné identifikovať potenciálne objekty v obraze.
 
     \subsection{Detekcia horizontu pomocou Houghovej transformácie}
 
-        Pokiaľ časť obrazu obsahuje horizont, je vhodnejšie detekovať lietajúce objekty len na oblohe nad ním, aby sa predišlo falošným detekciám. Horizont je možné detekovať z obrazu hrán pomocou Houghovej transformácie, podľa práce. Vo výsledku Houghovej transformácie sa horizont prejaví ako najvýraznejšia čiara.
+        Pokiaľ časť obrazu obsahuje horizont, je vhodnejšie detekovať lietajúce objekty len na~oblohe nad ním, aby sa predišlo falošným detekciám. Horizont je možné detekovať z~obrazu hrán pomocou Houghovej transformácie, podľa práce \cite{Janousek2018}. Vo výsledku Houghovej transformácie sa horizont prejaví ako najvýraznejšia čiara.
 
 
         \begin{figure}[H]
@@ -249,28 +249,30 @@
             \caption{Detekcia horizontu pomocou Houghovej transformácie}
         \end{figure}
 
+    %\subsection{Detekcia objektov z kontúr}
+
 \section{Detekcia pohybu}
 
-    V prípade že je požadovaná detekcia pohybujúcich sa objektov, je možnosťou detekcie práve detekovaním ich pohybu. Jednou z jednoduchých metód detekcie pohybu sú rozdielové metódy, pri ktorých je vypočítavaný rozdielový snimok z viacerých snímkov zo sekvencie \(\{I_1, I_2, ..., I_n\}\). Rozdielový snímok môže byť:
+    V prípade, že je požadovaná detekcia pohybujúcich sa objektov, je možnosťou detekcie práve detekovaním ich pohybu. Jednou z jednoduchých metód detekcie pohybu sú rozdielové metódy, pri ktorých je vypočítavaný rozdielový snimok z viacerých snímkov zo sekvencie \(\{I_1, I_2, ..., I_n\}\). Rozdielový snímok môže byť:
 
     \begin{itemize}
-        \item \textbf{jednostranný} - je najjednoduchší nenesie informáciu o smere pohybu, vyhodnocuje sa len v miestach kde \(I_1(x,y) > I_2(x,y)\).
+        \item \textbf{jednostranný} - je najjednoduchší, nenesie informáciu o smere pohybu, vyhodnocuje sa len v miestach, kde \(I_1(x,y) > I_2(x,y)\).
         \[D(x,y) = \begin{cases}
             0 & I_1(x,y) - I_2(x,y) < \epsilon \\
             1 & I_1(x,y) - I_2(x,y) \geq \epsilon
         \end{cases}\]
 
-        \item \textbf{obojstranný} - dostaneme ho upravením vzťahu pre jednostranný rozdielový snímok, použitím absolútnej hodnoty. Tým je dosiahnutá zameniteľnosť \(I_1(x,y)\) a \(I_2(x,y)\), vyhodnocuje sa teda na celom obraze. Neodstraňuje nedostatok informácie o smere pohybu, tá však nemusí byť nutnosťou.
+        \item \textbf{obojstranný} - dostaneme ho upravením vzťahu pre jednostranný rozdielový snímok  použitím absolútnej hodnoty. Tým je dosiahnutá zameniteľnosť \(I_1(x,y)\) a \(I_2(x,y)\), vyhodnocuje sa teda na celom obraze. Neodstraňuje nedostatok informácie o smere pohybu, tá však nemusí byť nutnosťou.
         \[D(x,y) = \begin{cases}
             0 & |I_1(x,y) - I_2(x,y)| < \epsilon \\
             1 & |I_1(x,y) - I_2(x,y)| \geq \epsilon
         \end{cases}\]
 
-        \item \textbf{kumulovaný} - je vytvorený váženým súčtom jedno alebo obojstranných rozdielových snímkov. Je teda možné priemerovať pohyb za určitý čas určením každej váhy \(\omega = 1/(N-1)\), alebo určiť rôznym snímkom rôznu váhu a získať tak informáciu o smere pohybu.
+        \item \textbf{kumulovaný} - je vytvorený váženým súčtom jedno alebo obojstranných rozdielových snímkov. Je teda možné priemerovať pohyb za určitý čas určením každej váhy \(\omega = \frac{1}{N-1}\) alebo určiť rôznym snímkom rôznu váhu a získať tak informáciu o smere pohybu.
         \[D(x,y) = \sum_{i=1}^{N-1}\omega_i \cdot D_i(x,y)\]
     \end{itemize}
 
-    Komplexnejšiou metódou detekcie pohybu je vytvorenie rozdielového snímku nie medzi nasledujúcimi snímkami, ale aktuálnym snímkom a vytvoreným modelom pozadia. Ten je možné zostaviť:
+    Komplexnejšou metódou detekcie pohybu je vytvorenie rozdielového snímku nie medzi nasledujúcimi snímkami, ale aktuálnym snímkom a vytvoreným modelom pozadia. Ten je možné zostaviť:
 
     \begin{itemize}
         \item ako jeden obraz pozadia bez objektov.
@@ -312,7 +314,7 @@
 
     Výpočet nového modelu pozadia \(B_{i+1}(x,y)\) môže prebiehať napríklad pomocou lineárneho zabúdania, teda \(B_{i+1}(x,y) = \alpha \cdot I_i(x,y) + (1 - \alpha) \cdot B_i(x,y)\).
 
-    Obraz obsahujúci detekovaný pohyb je získaný rozdielom a prahovaním aktuálneho snímku a modelu pozadia.
+    Obraz obsahujúci detekovaný pohyb je získaný rozdielom a prahovaním aktuálneho snímku a modelu pozadia. \cite{OpenCV2023}
 
     \begin{figure}[H]
         \centering
@@ -334,15 +336,115 @@
 
 \chapter{Popis objektov}
 
-    \section{príznaky}
+    Po nájdení objektov v obraze nasleduje ich popis pomocou príznakového vektoru. Ten predstavuje matematickú reprezentáciu segmentu obrazu vektorom o ľubovoľnom počte rozmerov. Jeho prvky popisujú farbu, textúru alebo tvar objektu. Samotný objekt nemusí byť rekonštruovateľný z jeho popisu, cieľom je podľa neho rozlíšiť od seba dva rôzne objekty.
+
+    Vypočítané hodnoty príznakového vektoru majú niekoľko využití:
+
+    \begin{itemize}
+        \item \textbf{Párovanie objektov} v dvoch snímkoch, teda určenie, ktoré body alebo objekty v jednom snímku korelujú s tými v druhom. Výhodou je to pri vyhľadávaní rovnakého objektu v po sebe nasledujúcich snímkoch pri sledovaní pohybu, či pri hľadaní rovnakého objektu v obraze z dvoch kamier.
+        \item \textbf{Klasifikácia} objektov v obraze. Objekty rôznych tried majú často rôzne hodnoty určitých príznakov, je však nutné určiť ktoré príznaky sú pre klasifikáciu relevantné.
+    \end{itemize}
+
+    \section{Popis tvaru}
+
+        Jedny z najjednoduchších príznakov vychádzajú z tvaru objektu, používajú sa s~binárnym obrazom získaným napríklad prahovaním. \cite{Morse1998/2} Sú to napríklad:
+
+        \begin{itemize}
+            \item \textbf{Obsah} oblasti objektu, teda počet pixelov predstavujúcich objekt v binárnom obraze.
+            \item \textbf{Obvod} je počet pixelov na hrane tvaru objektu. Diagonálne hrany môžu byť pri výpočte obvodu nadhodnotené v prípade, ak počítame s 4-okolím alebo podhodnotené, ak počítame s 8-okolím bodov na hrane. Je teda správnejšie počítať 1 pixel pre pravouhlé hrany a \(\sqrt{2}\) pre diagonálne hrany.
+            \item \textbf{Kompaktnosť} alebo kruhovosť je podobnosť tvaru ku kruhu. Vypočítava sa ako \(\frac{Obvod^2}{Obsah}\) a je vždy vyššia alebo rovná kompaktnosti kruhu, čo je \(4\pi\).
+            \item \textbf{Excentricita} môže mať niekoľko definícií, jednou z nich je pomer dĺžky najdlhšej úsečky v tvare objektu s dĺžkou najdlhšej úsečky na ňu kolmej. Taktiež je to excentricita elipsy s rovnakým momentom druhého rádu, teda pomer vzdialeností ohnisiek a dĺžky hlavnej osy.
+            \item \textbf{Pozdĺžnosť} je pomer výšky a šírky minimálneho opísaného obdĺžnika.
+            \item \textbf{Pravouhlosť} alebo podobnosť s obdĺžnikom je pomer obsahu objektu a obsahu minimálneho opísaného obdĺžnika. Môže nadobúdať hodnoty do 1 a limitne môže klesať k 0.
+            \item \textbf{Orientácia} alebo uhol hlavenj osi.
+            \item \textbf{Eulerovo číslo} je topologický príznak značiaci rozdiel počtu spojených komponentov a dier v tvare objektu. Topológia popisuje vlastnosti tvaru, ktoré sa nemenia úpravami okrem delenia a spájania častí tvaru.
+            \item \textbf{Počet konkávností} nie je topologickým príznakom, napriek jeho podobnosti s nimi. Získa sa spočítaním spojitých oblastí v rozdiele binárneho obrazu objektu a jeho konvexného obalu.
+            \item \textbf{Konvexnosť} je možné určiť z pomeru obsahu objektu ku obsahu jej konvexného obalu.
+        \end{itemize}
+
+    \section{Fotometrické príznaky}
+
+        Príznaky, ktorých hodnota závisí na jasových úrovniach popisovaného segmentu obrazu sa nazývajú fotometrické príznaky. Môže ísť o priemernú (\(B_{priemer}\)), minimálnu (\(B_{min}\)), maximálnu (\(B_{max}\)) hodnotu jasu objektu, rozdiel extrémov v objekte (\(B_{dif.}\)), priemerov jasu objektu \((\Omega)\) a pozadia \((\Phi)\) \((B_{dif. pozadia})\), či príznaky vyplývajúce z histogramu (H) alebo geometrických momentov.
+
+        \begin{figure}[!ht]
+            \centering
+            \begin{minipage}[b]{0.45\textwidth}
+                \[
+                    B_{priemer} = \frac{1}{N} \cdot \sum_{(x,y) \in \Omega} f(x,y)
+                \]
+            \end{minipage}
+            \begin{minipage}[b]{0.45\textwidth}
+                \[
+                    B_{max} = max(f(x,y))
+                \]
+            \end{minipage}
+            \begin{minipage}[b]{0.45\textwidth}
+                \[
+                    B_{dif. pozadia} = B_{priemer(\Omega)} - B_{priemer(\Phi)} 
+                \]
+            \end{minipage}
+            \begin{minipage}[b]{0.45\textwidth}
+                \[
+                    B_{min} = min(f(x,y))
+                \]
+            \end{minipage}
+            \begin{minipage}[b]{0.45\textwidth}
+                \[
+                    H_{priemer} = \frac{1}{N} \cdot \sum_{q=1}^{N} q \cdot h(q)
+                \]
+            \end{minipage}
+            \begin{minipage}[b]{0.5\textwidth}
+                \[
+                    H_{kontrast} = \frac{1}{N} \cdot \sum_{q=1}^{N} (q \cdot h(q) - H_{priemer})^2
+                \]
+            \end{minipage}
+            \begin{minipage}[b]{0.45\textwidth}
+                \[
+                    H_{energia} = \frac{1}{N} \cdot \sum_{q=1}^{N} h(q)^2
+                \]
+            \end{minipage}
+            \begin{minipage}[b]{0.45\textwidth}
+                \[
+                    H_{entropia} = \frac{1}{N} \cdot \sum_{q=1}^{N} h(q) \cdot log_2h(q)
+                \]
+            \end{minipage}
+        \end{figure}
+
+        Z geometrických momentov, ktorých hodnoty sú závislé na afinných transformáciách (translácia, rotácia a úprava mierky) je možné úpravou získať príznaky na transformácii nezávislé. \cite{Erbo2017} Všeobecne je moment rádu (p,q) segmentu l(x,y) daný:
+        \begin{figure}[!ht]
+            \begin{minipage}[b]{0.45\textwidth}
+                \[
+                    m_{pq} = \int_{-\infty}^\infty\int_{-\infty}^\infty x^p y^q l(x,y) dx dy
+                \]
+                \centering
+                (definícia)
+            \end{minipage}
+            \begin{minipage}[b]{0.45\textwidth}
+                \[
+                    m_{pq} = \sum_{X}\sum_{Y} x^p y^q l(x,y)
+                \]
+                \centering
+                (Pre konečný diskrétny obraz)
+            \end{minipage}
+        \end{figure}
+
+        Centralizované momenty \(\mu_{pq}\), vztiahnuté k ťažisku objektu \((x_t,y_t) = (\frac{m_{10}}{m_{00}},\frac{m_{01}}{m_{00}})\), získavajú nezávislosť na transláciu: \[\mu_{pq} = \sum_X\sum_Y\ (x-x_t)^p \cdot (y-y_t)^q \cdot l(x,y)\]
+
+        Z centralizovaných momentov je možné určiť momentové invarianty, základných sedem je nazývaných Huovými momentami.
 
 \chapter{Klasifikácia}
 
-    Ďalším krokom je určenie triedy detekovaných objektov, teda ich klasifikácia. Tá môže byť vykonaná na základe obrazu, alebo pomocou príznakov získaných z neho.
+    Ďalším krokom je zaradenie detekovaných objektov do tried, teda ich klasifikácia. Klasifikácia objektov vychádza z ich popisu.
+
+    \section{Klasifikátory}
+
+        Klasifikátory sú algoritmy schopné automaticky kategorizovať dáta do dvoch a viac tried. Modely určené na~klasifikáciu sú učené s učiteľom, je potrebné pomerne veľké množstvo anotovaných dát. Výsledkom je schopnosť generalizovať klasifikáciu na nových neznámych dátach.
+
+        Existuje niekoľko typov klasifikátorov, napríklad \textbf{Lineárne klasifikátory} rozdeľujú príznakový priestor nadrovinami, \textbf{Bayesov klasifikátor} vypočítava pravdepodobnosť zaradenia do triedy.
 
     \section{Konvolučné neurónové siete}
 
-        Na rozdiel od plne prepojenej neurónovej siete, sú \ac{CNN} prispôsobené na prácu s obrazom ako so vstupným signálom. Ich architektúra je usporiadaná do vrstiev, štandardne po sebe nasledujú:
+        Na rozdiel od plne prepojenej neurónovej siete, sú \ac{CNN} prispôsobené na prácu s obrazom ako so vstupným signálom. Pracujú na princípe výpočtu príznakov pomocou konvolučnej časti siete a klasifikáciou plne prepojenou sieťou. Ich architektúra je usporiadaná do vrstiev, štandardne po sebe nasledujú:
 
         \begin{enumerate}
             \item \textbf{Konvolučná vrstva} - používa konvolučné filtre na extrakciu príznakov z obrazu.
@@ -358,13 +460,13 @@
             \caption{Príklad architektúry konvolučnej neurónovej siete}
         \end{figure}
 
-        Rozmery vrstiev závisia na tvare vstupného signálu. V prípade šedotónového obrazu je každý bod obrazu reprezentovaný jednou skalárnou hodnotou, v prípade farebného záleží počet hodnôt na pixel na farebnom modele. Klasifikáciou z farebného obrazu získavame väčšie množstvo informácii ale je vyžadovaný vyšší výkon, nakoľko sa konvolučné filtre aplikujú po jednom na každú zložku obrazu (teda v prípade RGB modelu na červenú, zelenú a modrú zložku samostatne).
+        Rozmery vrstiev závisia na tvare vstupného signálu. V prípade šedotónového obrazu je každý bod obrazu reprezentovaný jednou skalárnou hodnotou, v prípade farebného záleží počet hodnôt na pixel na farebnom modeli. Klasifikáciou z farebného obrazu získavame väčšie množstvo informácii, ale je vyžadovaný vyšší výkon, nakoľko sa konvolučné filtre aplikujú po jednom na každú zložku obrazu (teda v prípade RGB modelu na červenú, zelenú a modrú zložku samostatne).
 
-        Výstup z poslednej vrstvy plne prepojenej časti siete je výstupom z celej \ac{CNN}. Výstupy klasifikačnej neurónovej siete s úlohov klasifikovať viacero tried, mávajú formáty:
+        Výstup z poslednej vrstvy plne prepojenej časti siete je výstupom z celej \ac{CNN}. Výstupy klasifikačnej neurónovej siete s úlohou klasifikovať viacero tried, mávajú formáty:
 
         \begin{itemize}
-            \item Jeden výstup, ktorého hodnota určuje triedu do ktorej sú vstupné dáta sieťou priradené.
-            \item Vektor výstupov výstupov s toľkými hodnotami, na koľko tried je naučená sieť klasifikovať. Hodnoty výstupov môžu reprezentovať:
+            \item Jeden výstup, ktorého hodnota určuje triedu, do ktorej sú vstupné dáta sieťou priradené.
+            \item Vektor výstupov s toľkými hodnotami, na koľko tried je naučená sieť klasifikovať. Hodnoty výstupov môžu reprezentovať:
             \begin{itemize}
                 \item Ohodnotenie triedy (score-based classification). V tomto prípade čísla na výstupe nemajú samostatne význam, ale ako predpoveď je určená trieda s najvyšším skóre.
                 \item Pravdepodobnosť zaradenia do danej triedy. Tá je získaná použitím výstupnej aktivačnej vrstvy typu \emph{softmax}, ktorá spôsobí že každý z výstupov má hodnotu od 0 do 1 a súčet všetkých výstupov je 1.
@@ -376,38 +478,38 @@
 
     \section{R-CNN}
 
-        \ac{R-CNN} sú skupina modelov strojového učenia zaločená na \ac{CNN}. Ich cieľom je nájdenie a klasifikovanie objektov v obraze. Ich výstupom je množina rámčekov ohraničujúcich objekty a im pridelené triedy.
+        \ac{R-CNN} sú skupina modelov strojového učenia zaločená na \ac{CNN}. Ich cieľom je nájdenie a~klasifikovanie objektov v obraze. Ich výstupom je množina rámčekov ohraničujúcich objekty a im pridelené triedy.
 
         \ac{R-CNN} pracujú v niekoľkých etapách:
         \begin{enumerate}
             \item \textbf{Selektívne vyhľadávanie} - vstupný obraz je spracovaný a sú extrahované \ac{RoI}, teda orámované oblasti obrazu, ktoré by mohli obsahovať objekty alebo ich časti. Počet takto navrhovaných oblastí môže dosahovať niekoľko tisíc.
             \item \textbf{Extrakcia príznakov} - každý \ac{RoI} je predložený ako vstup pre naučenú \ac{CNN}, ktorá vyprodukuje príznakový vektor pre každý \ac{RoI}.
             \item \textbf{Klasifikácia} - pomocou skupiny modelov \ac{SVM} je podľa príznakov extrahovaných \ac{CNN}, klasifikovaný každý \ac{RoI} do jednej z určených tried alebo ako pozadie - teda nepatriaci do žiadnej triedy.
-            \item \textbf{Regresia ohraničení} - konečný krok, zvyšujúci presnosť orámovania objektov. Používa sa pri ňom naučený model nezávyslý na mierka nazývaný \emph{bounding box regressor}. Jeho výstup je štvorrozmerný, skladá sa z polohy a rozmerov ohraničujúceho obdĺžnika.
+            \item \textbf{Regresia ohraničení} - konečný krok, zvyšujúci presnosť orámovania objektov. Používa sa pri ňom naučený model nezávislý na mierke nazývaný \emph{bounding box regressor}. Jeho výstup je štvorrozmerný, skladá sa z polohy a rozmerov ohraničujúceho obdĺžnika.
         \end{enumerate}
 
-        \ac{R-CNN} sú efektívne, no náročné na výpočetný výkon. Z toho dôvodu boli vyvinuté rýchlejšie varianty \emph{Fast R-CNN} a \emph{Faster R-CNN}.
+        \ac{R-CNN} sú efektívne, no náročné na výpočtový výkon. Z toho dôvodu boli vyvinuté rýchlejšie varianty \emph{Fast R-CNN} a \emph{Faster R-CNN}.
 
         \emph{Fast R-CNN} aplikuje \ac{CNN} na celý vstupný obraz a extrahuje z neho mapu príznakov. Až na výslednú mapu aplikuje takzvaný \ac{RoI} \emph{pooling}, ktorý extrahuje príznaky pre každý \ac{RoI}, pomocou okna pevnej veľkosti. Zvyšok modelu pracuje podobne ako \ac{R-CNN}, s využitím plne prepojenej siete na klasifikáciu a generovanie orámovaní.
 
-        \emph{Faster R-CNN} nadväzuje na \emph{Fast R-CNN} nahradením selektívneho vyhľadávania modelom typu \ac{RPN}. Vstupný obraz prechádza predučenou \ac{CNN}, sú extrahované príznaky. \ac{RPN} využije nájdené príznaky aby určila kde sa nachádzajú potenciálne objekty v obraze. V konečnom kroku sú klasifikované navrhnuté ohraničené oblasti podľa príznakov extrahovaných v predošlom kroku. \emph{Faster R-CNN} je dostatočne rýchla na použitie v reálnom čase.
+        \emph{Faster R-CNN} nadväzuje na \emph{Fast R-CNN} nahradením selektívneho vyhľadávania modelom typu \ac{RPN}. Vstupný obraz prechádza predučenou \ac{CNN}, sú extrahované príznaky. \ac{RPN} využije nájdené príznaky aby určila, kde sa nachádzajú potenciálne objekty v obraze. V konečnom kroku sú klasifikované navrhnuté ohraničené oblasti podľa príznakov extrahovaných v predošlom kroku. \emph{Faster R-CNN} je dostatočne rýchla na použitie v reálnom čase.
 
     \section{YOLO}
 
-        \ac{YOLO} je populárny algorytmus detekcie, ktorý na rozdiel od \ac{R-CNN} rozdeľuje obraz do mriežky a postupne aplikuje klasifikátor. Postupuje nasledovne:
+        \ac{YOLO} je populárny algoritmus detekcie, ktorý na rozdiel od \ac{R-CNN} rozdeľuje obraz do mriežky a postupne aplikuje klasifikátor. Postupuje nasledovne:
 
         \begin{enumerate}
             \item Vstuný obraz je rozdelený na mriežku \(S \times S\), ktorej veľkosť závisí na verzii \ac{YOLO}.
-            \item V každej bunke mriežky je predikovaný určitý počet ohraničených oblastí a im priradené skóre dôveryhodnosti. Tie značia úroveň istoty že oblasť obsahuje objekt a že dané ohraničenie je správne.
-            \item Je použitých viacero klasifikátorov. \ac{YOLO} predikuje viacero oblastí za každú bunku. Počas trénovania je jednému z prediktorov udelená zodpovednosť za predikovanie daného objekto podľa toho ktorý z nich dosahuje najväčší \ac{IOU}.
+            \item V každej bunke mriežky je predikovaný určitý počet ohraničených oblastí a im priradené skóre dôveryhodnosti. Tie značia úroveň istoty, že oblasť obsahuje objekt a že dané ohraničenie je správne.
+            \item Je použitých viacero klasifikátorov. \ac{YOLO} predikuje viacero oblastí za každú bunku. Počas trénovania je jednému z prediktorov udelená zodpovednosť\linebreak za~predikovanie daného objekto podľa toho, ktorý z nich dosahuje najväčší \ac{IOU}.
             \item Každá bunka predikuje rozdelenie pravdepodobnosti všetkých tried.
         \end{enumerate}
 
-        Hlavnou výhodou \ac{YOLO} je rýchlosť. Všeobecne pracuje rýchlejšie a s menším požadovaným výpočetným výkonom. Na druhú stranu má nevýhody spôsobené obmedzením veľkosti orámovaných oblastí. Presnosť \ac{YOLO} býva nižšia pri primalých objektoch, pre použitia vyžadujúce vyžšiu presnosť sa môže javiť ako výhodnejšie použiť iné modely.
+        Hlavnou výhodou \ac{YOLO} je rýchlosť. Všeobecne pracuje rýchlejšie a s menším požadovaným výpočtovým výkonom. Na druhú stranu má nevýhody spôsobené obmedzením veľkosti orámovaných oblastí. Presnosť \ac{YOLO} býva nižšia pri primalých objektoch, pre použitia vyžadujúce vyššiu presnosť sa môže javiť ako výhodnejšie použiť iné modely.
 
-\chapter{Návrh kombinácie a usporiadania hardvérových komponentov}
+\chapter{Návrh usporiadania hardvérových komponentov}
 
-    Táto kapitola sa zameriava na návrh a implementáciu prenosného zariadenia pre detekciu, klasifikáciu a trasovanie lietajúcich objektov. Cieľom návrhu je vytvorenie zariadenia s možnosťou nasadenia v čo najrôznejších podmienkach. Jednou z podminok je teda jeho prenosnosť, možnosť napájania z akumulátoru a nezávyslosť na iných zariadeniach pri jeho nastavení a používaní.
+    Táto kapitola sa zameriava na návrh a implementáciu prenosného zariadenia pre~detekciu, klasifikáciu a trasovanie lietajúcich objektov. Cieľom návrhu je vytvorenie zariadenia s možnosťou nasadenia v čo najrôznejších podmienkach. Jednou z podmienok je teda jeho prenosnosť, možnosť napájania z akumulátora a nezávislosť na~iných zariadeniach pri jeho nastavení a používaní.
 
     \section{Jednodoskový počítač}
     
@@ -420,13 +522,11 @@
             \item MIPI CSI konektor pre pripojenie kamery.
         \end{itemize}
 
-        Ďalšou možnosťou je použitie jednodoskového počítača špeciálne navrhnutého na použitie v aplikáciách počítačového videnia, či všeobecne umelej inteligencie (Nvidia Jetson Xavier, Google Coral Dev Board, Rock Pi, Nvidia Jetson Nano, a podobné). \emph{Raspberry Pi} má v porovnaní nižší odber, je kompaktnejšie, jednoduché na použitie a má dobrú kompatibilitu s operačnými systémamy. Dokumentácia a knižnice pre \emph{Raspberry Pi} sú jednoducho dostupné a zariadenia majú garantovanú dlhodobú podporu software aj hardware.
-
-        Z týchto dôvodov bolo \emph{Raspberry Pi} zvolené na použitie v zariadení.
+        Ďalšou možnosťou je použitie jednodoskového počítača špeciálne navrhnutého na~použitie v~aplikáciách počítačového videnia, či všeobecne umelej inteligencie (Nvidia Jetson Xavier, Google Coral Dev Board, Rock Pi, Nvidia Jetson Nano, a podobné). \emph{Raspberry Pi} má v porovnaní nižší odber, je kompaktnejšie, jednoduché na použitie a má dobrú kompatibilitu s operačnými systémami. Dokumentácia a knižnice pre~\emph{Raspberry Pi} sú jednoducho dostupné a zariadenia majú garantovanú dlhodobú podporu softvéru aj hardvéru. Z týchto dôvodov bolo \emph{Raspberry Pi} zvolené na použitie v zariadení.
 
     \section{Kamera}
 
-        \emph{Raspberry Pi} dovoľuje pripojenie kamery cez MIPI konektor. Je teda najjednoduchšie použiť kamerový modul vyrobený konkrétne pre \emph{Raspberry Pi}. Najaktuálnejší oficiálny \emph{Raspberry Pi} kamerový modul v čase návrhu je 12Mpx \emph{Raspberry Pi Camera 3} so senzorom Sony IMX708 a automatickým ostrením. Parametre kamery a objektívu sú:
+        \emph{Raspberry Pi} dovoľuje pripojenie kamery cez MIPI konektor. Je teda najjednoduchšie použiť kamerový modul vyrobený konkrétne pre \emph{Raspberry Pi}. Najaktuálnejší oficiálny \emph{Raspberry Pi} kamerový modul v čase návrhu je 12Mpx \emph{Raspberry Pi Camera 3} so senzorom Sony IMX708 a automatickým ostrením. Parametre kamery a~objektívu sú:
         \begin{itemize}
             \item \textbf{Ohnisková vzdialenosť:} 4,74 mm
             \item \textbf{Horizontálne zorné pole} 66 \(^\circ\)
@@ -439,7 +539,7 @@
 
     \section{Uchytenie kamery}
 
-        Praktickou výhodou prenosného zariadenia by bola možnosť jeho umiestnenia o statív. Keďže je cieľom kamerou mieriť smerom nahor, na oblohu, bolo by užívateľské rozhranie pri nesprávnej vzájomnej orientácii kamery a displeja natočené neprakticky nadol. Namiesto pevnej konfigurácie uhla medzi displejom a kamerou bolo navrhnuté pohyblivé uchytenie kamery v kryte zariadenia, vyrobiteľné 3D tlačou.
+        Praktickou výhodou prenosného zariadenia je možnosť jeho umiestnenia na statív. Keďže cieľom je kamerou mieriť smerom nahor na oblohu, bolo by užívateľské rozhranie pri nesprávne navrhnutej orientácii kamery a displeja natočené neprakticky nadol. Namiesto pevnej konfigurácie uhla medzi displejom a kamerou bolo navrhnuté pohyblivé uchytenie kamery v kryte zariadenia, vyrobiteľné 3D tlačou.
 
         \begin{figure}[H]
             \centering
@@ -472,17 +572,17 @@
 
 \chapter{Tvorba datasetu}
 
-    Správne naučenie modelov a ich schopnosť generalizovať z veľkej miery záleží na kvalite použitého datasetu (množiny dát). Tvorba datasetu je teda kľúčový krok pri práci so systémami strojového videnia.
+    Správne naučenie modelov a ich schopnosť generalizovať z veľkej miery záleží na~kvalite použitého datasetu (množiny dát). Tvorba datasetu je teda kľúčový krok pri~práci so systémami strojového videnia.
 
-    Cieľom pri tvorbe datasetu je zabezpečiť dostatočnú kvalitu a správnosť dát, dosiahnuť početne podobné zastúpenie každej triedy a správne reprezentovať rôznorodosť dát v rámci jednotlivých tried. Je vhodné aby boli vzorky získané pri rôznych podmienkach, podľa plánovaného použitia výsledného modelu.
+    Cieľom pri tvorbe datasetu je zabezpečiť dostatočnú kvalitu a správnosť dát, dosiahnuť početne podobné zastúpenie každej triedy a správne reprezentovať rôznorodosť dát v rámci jednotlivých tried. Je vhodné, aby boli vzorky získané pri rôznych podmienkach, podľa plánovaného použitia výsledného modelu.
 
     \section{Získavanie dát}
 
-        Keďže táto práca nadväzuje na prácu \cite{Jurecka2021}, tvorí dataset v nej vytvorený základ pre ten použitý v tejto práci. Navyše bol rozšírený o niekoľko ďalších open source datasetov a vlastných anotovaných fotografii.
+        Keďže táto práca nadväzuje na prácu \cite{Jurecka2021}, tvorí dataset v nej vytvorený základ pre dataset použitý v tejto práci. Navyše bol rozšírený o niekoľko ďalších open source datasetov a vlastných anotovaných fotografií.
 
-        Na tvorbu datasetu bol použitý program \emph{roboflow}, ktorý umožňuje načítavanie existujúcich datasetov, nahrávanie vlastných fotografii, anotáciu, spájanie dostupných datasetov, augmentácia datasetu a generovanie anotačných súborov rôznych formátov.
+        Na tvorbu datasetu bol použitý program \emph{roboflow}, ktorý umožňuje načítavanie existujúcich datasetov, nahrávanie vlastných fotografií, anotáciu, spájanie dostupných datasetov, augmentáciu datasetu a generovanie anotačných súborov rôznych formátov.
 
-        Po pridaní všetkých častí datasetu a kontrole správnosti anotácie, boli počty inštancií jednotlivých tried:
+        Po pridaní všetkých častí datasetu a kontrole správnosti anotácie boli počty inštancií jednotlivých tried:
 
         \begin{itemize}
             \item \textbf{vták}: 9047
@@ -494,9 +594,9 @@
 
     \section{Úprava, rozdelenie a rozšírenie datasetu}
 
-        Niektoré triedy sú reprezentované výrazne menším množstvom jednotlivých inštancii, čo je spôsobené nižšou dostupnosťou dát. Väčšina fotografii vtákov z vzdialenosti pri ktorej by mali byť detekované pochopiteľne obsahuje niekoľko desiatok jedincov, trieda vták je teda nadmerne zastúpená. Je možné tento problém čiastočne vyriešiť augmentáciou datasetu, čo program \emph{roboflow} umožňuje priamo pri generovaní novej verzie. V budúcnosti je vhodnejším riešením ďalšie rozšírenie datasetu o snímky s objektami aktuálne nedostatočne reprezentovaných tried.
+        Niektoré triedy sú reprezentované výrazne menším množstvom jednotlivých inštancii, čo je spôsobené nižšou dostupnosťou dát. Väčšina fotografii vtákov zo vzdialenosti, pri ktorej by mali byť detekované, pochopiteľne obsahuje niekoľko desiatok jedincov, trieda vták je teda nadmerne zastúpená. Je možné tento problém čiastočne vyriešiť augmentáciou datasetu, čo program \emph{roboflow} umožňuje priamo pri generovaní novej verzie. V budúcnosti je vhodnejším riešením ďalšie rozšírenie datasetu o snímky s~objektami aktuálne nedostatočne reprezentovaných tried.
 
-        Aby bolo zabránené preučeniu modelu, musia byť dáta na ktorých je model učený rôzne od vylidačných a testovacích. Anotované obrazové dáta boli rozdelené do skupín s počtom:
+        Aby bolo zabránené preučeniu modelu, musia byť dáta, na ktorých je model učený, rôzne od vylidačných a testovacích. Anotované obrazové dáta boli rozdelené do skupín s počtom:
 
         \begin{itemize}
             \item \textbf{trénovanie}: 2367
@@ -517,14 +617,14 @@
 
     \section{Testovanie použiteľnosti datasetu}
 
-    Použiteľnosť modelu bola testovaná naučením modelu typu \emph{Roboflow 3.0 Object Detection} priamo v aplikácii \emph{roboflow}, ktorý dosahoval úroveň presnosti 86.1 \% pri zvolenej variante modelu \emph{fast}. Pri dlhšom učení modelu určeného na reálne použitie sa dá predpokladať že dosiahnutá presnosť bude vyššia.
+    Použiteľnosť modelu bola testovaná naučením modelu typu \emph{Roboflow 3.0 Object Detection} priamo v aplikácii \emph{roboflow}, ktorý dosahoval úroveň presnosti 86.1 \% pri~zvolenom variante modelu \emph{fast}. Pri dlhšom učení modelu určeného na reálne použitie sa dá predpokladať, že dosiahnutá presnosť bude vyššia.
 
     Obrázok \ref{fig:roboflow_metrics} zobrazuje metriky presnosti naučeného modelu vypočítané v programe \emph{roboflow}, tak ako sa v ňom zobrazujú. Vypočítané metriky sú:
 
     \begin{itemize}
-        \item \textbf{\ac{mAP}} \\ priemer priemerných presností za všetky triedy
-        \item \textbf{Presnosť (Precision)} = \(\frac{TP}{TP + FP}\), značí s akou mieru správnej predikcie, v momente keď model nejakú hodnotu predikuje.
-        \item \textbf{Senzitivita (Recall)} = \(\frac{TP}{TP + FN}\), na druhú stranu predstavuje pomer počtu správnych predikcii, ku počtu skutočne správnych hodnôt danej triedy.
+        \item \textbf{\ac{mAP}} \\ priemer priemerných presností za všetky triedy.
+        \item \textbf{Presnosť (Precision)} = \(\frac{TP}{TP + FP}\), značí mieru správnej predikcie, v~momente, keď model nejakú hodnotu predikuje.
+        \item \textbf{Senzitivita (Recall)} = \(\frac{TP}{TP + FN}\), predstavuje pomer počtu správnych predikcii ku počtu skutočne správnych hodnôt danej triedy.
     \end{itemize}
 
     \begin{figure}[H]
@@ -552,50 +652,53 @@
 
     Pri návrhu a tvorbe aplikácie systému detekcie lietajúcich objektov bol kladený dôraz na:
     \begin{itemize}
-        \item Spustiteľnosť a použiteľnosť na počítači
-        \item Ovládateľnosť dotykovým panelom
-        \item Modulárnosť a rozšíriteľnosť
-        \item Spätná väzba a grafické zobrazenie výsledkov užívateľovi
-        \item Možnosť používať, testovať a porovnávať rôzne metódy detekcie, klasifikácie a trasovania.
+        \item spustiteľnosť a použiteľnosť na počítači,
+        \item ovládateľnosť dotykovým panelom,
+        \item modulárnosť a rozšíriteľnosť,
+        \item spätná väzba a grafické zobrazenie výsledkov užívateľovi,
+        \item možnosť používať, testovať a porovnávať rôzne metódy detekcie, klasifikácie a~trasovania.
     \end{itemize}
 
     \section{Použitý jazyk a knižnice}
 
-        Použitím programovacieho jazyka \emph{python}, bola získaná kompatibilita zo zariadeniami a operačnými systémami ktoré podporujú interpretér jazyka \emph{python}, teda hlavne \emph{Raspberry Pi} s nainštalovaným operačným systémom Raspberry Pi OS a osobné počítače, čo uľahčuje vývoj aplikácie a umožňuje jeho použitie na ľubovoľnom počítači.
+        Použitím programovacieho jazyka \emph{python} bola získaná kompatibilita zo zariadeniami a operačnými systémami, ktoré podporujú interpretér jazyka \emph{python}, teda hlavne \emph{Raspberry Pi} s nainštalovaným operačným systémom Raspberry Pi OS a~osobné počítače, čo uľahčuje vývoj aplikácie a umožňuje jeho použitie na ľubovoľnom počítači.
 
-        Na tvorbu grafického rozhrania bola použitá knižnica \ac{tkinter}. Tá umožňuje vytvárať grafické používateľské rozhranie priamo z kódu v jazyku \emph{python}. Obsahuje tiež objekty časovačov, vďaka ktorým je možné jednoducho a spoľahlivo ovládať kontinuálny beh aplikácie. Užívateľské rozhranie vytvorené knižnicou \ac{tkinter} je kompatibilné s ovládaním klávesnicou a myšou, aj dotykovým displejom.
+        Na tvorbu grafického rozhrania bola použitá knižnica \ac{tkinter}. Tá umožňuje vytvárať grafické používateľské rozhranie priamo z kódu v jazyku \emph{python}. Obsahuje tiež objekty časovačov, vďaka ktorým je~možné jednoducho a spoľahlivo ovládať kontinuálny beh aplikácie. Užívateľské rozhranie vytvorené knižnicou \ac{tkinter} je kompatibilné s ovládaním klávesnicou a myšou, aj dotykovým displejom.
 
-        Knižnica \emph{OpenCV} obsahuje implementáciu množstva algorytmov spracovania obrazu a počítačového videnia. Umožňuje základné operácie s videom aj jednotlivými snímkami ako načítanie, ukladanie a zobrazovanie, pričom podporuje rôzne formáty obrazových dát. Sofistikovanejšie úlohy ktoré knižnica rieši zahrnujú detekciu, klasifikáciu, sledovanie pohybu. Knižnica \emph{OpenCV} je kompatibilná s viacerými programovacími jazykmi, vrátane jazyku \emph{python}.
+        Knižnica \emph{OpenCV} obsahuje implementáciu množstva algoritmov spracovania obrazu a počítačového videnia. Umožňuje základné operácie s videom aj jednotlivými snímkami ako načítanie, ukladanie a zobrazovanie, pričom podporuje rôzne formáty obrazových dát. Sofistikovanejšie úlohy, ktoré knižnica rieši, zahrňujú detekciu, klasifikáciu, sledovanie pohybu. Knižnica \emph{OpenCV} je kompatibilná s viacerými programovacími jazykmi, vrátane jazyku \emph{python}.
 
     \section{Štruktúra aplikácie}
 
         Aplikácia je zložená z modulov reprezentujúcich jednotlivé implementované metódy detekcie, klasifikácie či trasovania alebo riadiacich modulov ovládajúcich tok dát medzi modulmi. Základnými typmi modulov tvoriacich aplikáciu sú:
         \begin{itemize}
-            \item \textbf{Hlavná aplikácia} - existuje len jedna varianta, je zodpovedná za ovládanie systému, užívateľské rozhranie a súšťanie ostatných modulov. Pre každý z ďalších jednotlivých typov modulov je hlavnému modulu priradený zoznam existujúcich modulov daného typu, z ktorých si užívateľ môže vybrať ten aktívny, ktorý sa aktuálne použije na daný účel.
-            \item \textbf{Poskytovateľ obrazu} - slúži na získavanie obrazových dát. Každý cyklus začína vyžiadaním nového obrazu od aktuálne zvoleného poskytovateľa obrazu hlavným modulom. Existujú dve varianty:
+            \item \textbf{Hlavná aplikácia} - existuje len jeden variant, je zodpovedný za ovládanie systému, užívateľské rozhranie a spúšťanie ostatných modulov. Pre každý z ďalších jednotlivých typov modulov je hlavnému modulu priradený zoznam existujúcich modulov daného typu, z ktorých si užívateľ môže vybrať ten aktívny, ktorý sa aktuálne použije na daný účel.
+            \item \textbf{Poskytovateľ obrazu} - slúži na získavanie obrazových dát. Každý cyklus začína vyžiadaním nového obrazu od aktuálne zvoleného poskytovateľa obrazu hlavným modulom. Existujú dva varianty:
             \begin{itemize}
                 \item \textbf{Video} - pri spustení aplikácia načíta všetky videá uložené v priečinku \path{./videos/} a pridá každému jeden objekt reprezentujúci dané video ako zdroj obrazu.
                 \item \textbf{Kamera} - ak je v systéme nainštalovaná \emph{python} knižnica pre ovládanie kamery, je do zonamu poskytovateľov obrazu pridaný objekt reprezentujúci kameru.
             \end{itemize}
-            \item \textbf{Detektor objektov} - po získaní aktuálneho obrazu je aplikovaný zvolený algorytmus detekcie. Detektoru je predaný obraz, jeho výstupom je zoznam rámikov oblastí v ktorých sa potenciálne nachádza objekt. V prípade zvolenia metódy detekcie a klasifikácie v jednom kroku je preskočený výber klasifikátora a výstupom je aj klasifikácia. 
-            \item \textbf{Klasifikátor} - ak je zvolený algorytmus detekcie, sú oblasti s potenciálnym obsahom objektu predané klasifikátoru. Klasifikátor vráti hlavnému modulu zaradenie objektov do tried, po prípade označenie oblasti za pozadie. V hlavnej aplikácii je následne graficky zobrazené orámovanie a klasifikácia objektu.
-            \item \textbf{Sledovač (Tracker)} - k ušetreniu výkonu je možne áplikovať detekciu a klasifikáciu len raz za určitý počet snímkov už a detekované a klasifikované objekty sledovať pomocou sledovačou z knižnice \emph{OpenCV}.
-            \item \textbf{Tester výsledkov} - v prípade že je zvolené video ako zdroj obrazu a v priečinku \path{./video_annotation/} je pridaný \ac{csv} s rovnakým menom ako video obsahujúci správne orámovanie, je spustený testovací modul ktorý ohodnocuje detekciu a klasifikáciu podľa určenej správnej hodnoty zo súboru.
+            \item \textbf{Detektor objektov} - po získaní aktuálneho obrazu je aplikovaný zvolený algoritmus detekcie. Detektoru je predaný obraz, jeho výstupom je zoznam rámikov oblastí v ktorých sa potenciálne nachádza objekt. V prípade zvolenia metódy detekcie a klasifikácie v jednom kroku je preskočený výber klasifikátora a výstupom je aj klasifikácia. 
+            \item \textbf{Klasifikátor} - ak je zvolený algoritmus detekcie, sú oblasti s potenciálnym obsahom objektu predané klasifikátoru. Klasifikátor vráti hlavnému modulu zaradenie objektov do tried, prípadne označenie oblasti za pozadie. V hlavnej aplikácii je následne graficky zobrazené orámovanie a klasifikácia objektu.
+            \item \textbf{Sledovač (Tracker)} - na ušetrenie výkonu je možne aplikovať detekciu a klasifikáciu len raz za určitý počet snímkov, a už detekované a klasifikované objekty sledovať pomocou sledovačov z knižnice \emph{OpenCV}.
+            \item \textbf{Tester výsledkov} - v prípade, že je zvolené video ako zdroj obrazu a v priečinku \path{./video_annotation/} je pridaný \ac{csv} s rovnakým menom ako video obsahujúci správne orámovanie, je spustený testovací modul, ktorý ohodnocuje detekciu a klasifikáciu podľa určenej správnej hodnoty zo súboru.
         \end{itemize}
 
-        Jednotlivé moduly sú vytvárané dedením od abstraktnej triedy predstavujúcej rozhranie modulu s aplikáciou. Pre každý z typov modulu je pripravená jedna abstraktná rodičovská trieda, obsahujúca niektoré zdieľané premenné, ako je názov modulu a funkcie ktoré musí modul implementovať. Povinnou funkciou je napríklad funkcia vyžiadania si ďalšieho snímku pre modul poskytovateľa obrazu.
+        Jednotlivé moduly sú vytvárané dedením od abstraktnej triedy predstavujúcej rozhranie modulu s aplikáciou. Pre každý z typov modulu je pripravená jedna abstraktná rodičovská trieda obsahujúca niektoré zdieľané premenné, ako je názov modulu a funkcie, ktoré musí modul implementovať. Povinnou funkciou je napríklad funkcia vyžiadania si ďalšieho snímku pre modul poskytovateľa obrazu.
 
     \section{Implementácia}
 
-        V aplikácii sú ako modul detekcie a klasifikácie aktuálne implementovaný model YOLO, pričom aplikácia automaticky pridá detekované naučené modely. Tie musia byť uložené v priečinku \path{./yolo/[model]/}, kde je \path{[model]} nahradené názvom modelu. v tomto priečinku je uložený model samotný v súbore \path{model.onnx} a \ac{csv} súbor so zoznamom názvov a farebných označení tried vo formáte \\
-        \emph{"názov", "červená", "zelená", "modrá"} \\
-        s názvom \path{classes.csv}. Aplikácia načíta všetky nájdené modely spolu s popisom tried a vloží ich do zoznamu detektorov.
+        V aplikácii je ako modul detekcie a klasifikácie aktuálne implementovaný model YOLO, pričom aplikácia automaticky pridá detekované naučené modely. Tie musia byť uložené v priečinku \path{./yolo/[model]/}, kde je \path{[model]} nahradený názvom modelu. V tomto priečinku je uložený model samotný v súbore \path{model.onnx} a \ac{csv} súbor so zoznamom názvov a farebných označení tried vo formáte:
+        \begin{figure}[H]
+            \centering
+            \emph{"názov", "červená", "zelená", "modrá"}
+        \end{figure}
+        Tento súbor má názvov \path{classes.csv}. Aplikácia načíta všetky nájdené modely spolu s popisom tried a vloží ich do zoznamu detektorov.
 
     \section{Návrh grafického rozhrania}
 
-        \ac{GUI} umožňuje intuitívne ovládanie aplikácie a zobrazovanie výsledkov detekcie, klasifikácie a sledovania.\linebreak Ovládanie jednotlivých modulov aplikácie je rozdelené do záložiek. Každá záložka umožňuje zvoliť ktorá z inštancii modulu každého z typov sa aktuálne používa.
+        \ac{GUI} umožňuje intuitívne ovládanie aplikácie a zobrazovanie výsledkov detekcie, klasifikácie a sledovania.\linebreak Ovládanie jednotlivých modulov aplikácie je rozdelené do záložiek. Každá záložka umožňuje zvoliť, ktorá z inštancii modulu každého z typov sa aktuálne používa.
 
-        V ľavej časti obrazovky je zobrazený aktuálny snímok, s výstupom detekcie a klasifikácie. Zobrazujú sa v ňom orámovania detekovaných objektov, ich priradenie do tried a hodnotenie dôveryhodnosti klasifikácie. Ak existuje súbor s anotáciou správneho orámovania a klasifikácie pre aktuálne prehrávané video, sú zobrazené aj tie.
+        V ľavej časti obrazovky je zobrazený aktuálny snímok s výstupom detekcie a~klasifikácie. Zobrazujú sa v ňom orámovania detekovaných objektov, ich priradenie do~tried a hodnotenie dôveryhodnosti klasifikácie. Ak existuje súbor s anotáciou správneho orámovania a klasifikácie pre aktuálne prehrávané video, sú zobrazené aj~tie.
 
         V prvej záložke je užívateľovi umožnené zvoliť zdroj obrazu. Ak je aplikácia spustená na \emph{Raspberry Pi} a je nainštalovaná kižnica ovládania kamery, je do zoznamu zdrojov pridaná kamera. Pri spustení aplikácie sú načítané videá z priečinku \path{./videos} a sú zobrazené v zozname na záložke zdrojov spolu s kamerou. Kliknutím na názov zdroja je zdroj zvolený a užívateľovi sa z neho začne zobrazovať obraz.
 
@@ -605,7 +708,7 @@
             \caption{Záložka na výber poskytovateľa obrazu}
         \end{figure}
 
-        V druhej záložke výberu detektora si užívateľ vyberie metódu detekcie, alebo metódu súčasnej detekcie a klasifikácie, pri ktorej nie je použiteľný výber klasifikátoru na ďalšej záložke. Zároveň je na tejto záložke nastaviteľná perióda spúšťania detekcie, medzi snímkami na ktorých je detekcia spustená sa buď zobrazované ohraničenie nemení, alebo je akutalizované sledovačom.
+        V druhej záložke výberu detektora si užívateľ vyberie metódu detekcie alebo metódu súčasnej detekcie a klasifikácie, pri ktorej nie je použiteľný výber klasifikátoru na ďalšej záložke. Zároveň je na tejto záložke nastaviteľná perióda spúšťania detekcie. Medzi snímkami, na ktorých je detekcia spustená, sa buď zobrazované ohraničenie nemení alebo je akutalizované sledovačom.
 
         \begin{figure}[H]
             \centering
@@ -621,7 +724,7 @@
             \caption{Záložka na výber metódy sledovania objektov}
         \end{figure}
 
-        Posledná záložka obsahuje menu z možnosťou zapnúť a vypnúť zobrazenie detekcie konkrétnych tried objektov. 
+        Posledná záložka obsahuje menu s možnosťou zapnúť a vypnúť zobrazenie detekcie konkrétnych tried objektov. 
 
         \begin{figure}[H]
             \centering

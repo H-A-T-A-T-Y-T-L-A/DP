@@ -1,5 +1,15 @@
-\chapter*{Závěr}
+\chapter*{Záver}
 \phantomsection
 \addcontentsline{toc}{chapter}{Závěr}
 
-Shrnutí studentské práce.
+% Shrnutí studentské práce.
+
+V~tejto práci bol popísaný návrh systému detekcie, trasovania a~klasifikácie lietajúcich objektov. V~kapitolách teoretickej časti práce boli vysvetlené teoretické základy postupov a~metód detekcie objektov v~obraze, ich popisu a~následného zaradenia do~tried. Dôraz bol kladený na~rozdiely medzi metódami, ich výhody a~nevýhody.
+
+Nasledujúce kapitoly sa~venovali samotnému návrhu systému. Bol navrhnutý a~odôvodnený výber hardvérových komponentov a~ich prepojenie. Pre jednoduchosť, spoľahlivosť a~dostatočný výkon bola zvolená platforma \emph{Raspberry Pi} s~dotykovým panelom ako užívateľským rozhraním a~kamerou od~spoločnosti \emph{Raspberry}.
+
+Ďalej bol zdokumentovaný návrh databázy anotovaných snímkov určených na~trénovanie klasifikátorov. Pri vytváraní bol použitý program \emph{roboflow}. Výsledná databáza vznikla spojením datasetu z~práce~\cite{Jurecka2021}, niekoľkých voľne dostupných datasetov spolu s~osobne získanými a~anotovanými fotografiami. Správnosť takto získanej databázy bola overená naučením modelu v~systéme \emph{roboflow} v~nastavení na~odskúšanie (fast). Na testovacej množine tento model dosahoval úroveň~\ac{mAP}~86,1~\%.
+
+Nakoniec bol popísaný softvér pre~navrhovaný systém, jeho štruktúra a~implementácia jeho častí. Spomenuté boli nástroje~a knižnice použité pri~jeho vývoji. Softvér zahrňuje moduly pre~výber zdroja dát, detekciu objektov, ich klasifikáciu, sledovanie a~kontrolu presnosti porovnaním s~anotáciou. Systém umožňuje výber aktuálne používanej metódy a~porovnanie medzi metódami. Keďže bol použitý programovací jazyk \emph{python} a knižnice dostupné na väčšine zariadení a operačných systémoch, je možné program spustiť aj na~bežnom počítači.
+
+Ciele pokračovania tejto práce zahřňujú ďalšie rozširovanie datasetu, implementáciu viacerých metód detekcie~a klasifikácie a vyhodnotenie a porovnanie prístupov.
