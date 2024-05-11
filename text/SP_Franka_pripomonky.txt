@@ -1,0 +1,47 @@
+X- již do úvodu by se asi hodilo blížeji popsat úlohu - statická kamera sledující část oblohy a může i částečně horizont, pořizována sekvence snímků, pohybující se objekty k detekci ale může se měnit (i pohybovat) i pozadí (mraky, objekty pod horizontem), zvažované třídy,.. = díky tomu můžete i teoretickou část již více vztahovat k úloze (jak máte obrázky, ale můžete i volbu metod (viz další odrážka), popis (co např. prahování, když mohou být letadla i světlejší než obloha) + že se zvažuje i implementace na méně výkonné výpočetní jednotce (proto snaha o výběr jednodušších, méně náročných algoritmů) + motivace - k čemu by to mohlo být dobré (ochrana soukromí, letiště, pole,...) 
+
+X- kap. 1 - říct, že segmentačních metod je spousta, možná nějaké základní dělení, případně vyjmenování některých často používaných, ale že v dalším textu jsou vybrány a popsány jen takové, které by se mohly hodit pro řešení úlohy (+ jsou jednoduché). 
+
+- najít a vyjít z literatury, která toto řeší - určitě najdete i jiné jako [2] 
+
+X- nelze pro detekci využít i barvu? všechny obrázky hned převádíte do šedotónového, ale pozadí bude mít jen nějaký omezený rozsah barev (modré a odstínů šedi) 
+
+X- str. 15 - "v rôznych častiač"
+
+- číslování vztahů
+
+X- str. 22 - "Modely určené na klasifikáciu sú učené s učiteľom" - mohou být i bez učitele
+
+X- kap. 3.1 - zmínit, že pro klasifikaci na základě příznaků určených popisem lze použít i neuronové sítě (klasické)  
+
+?- str. 24 - "na koľko tried je naučená sieť klasifikovať."
+
+- v kap. 3 a 4 nejsou odkazy na žádné zdroje - jsou to sice již všeobecně známé věci, ale přesto se hodí pár odkazů na nějakou základní literaturu
+
+- kap. 5 - rozdělit na dvě varianty: 1) kamera + PC, 2) přenosné zařízení a zmínit výhody a nevýhody každé - ad 1) není nutné žádné speciální nové zařízení, vyšší výkon, ad 2) kompaktní, přenositelné, samostatné zářízení, nezávislost, není třeba drátovat skrz okno apod.  
+
+- kap. 5.2 - rozbor úlohy - jaký by byl vhodný úhel záběru, resp. jaká část oblohy bude zabrána navrženou kamerou, jaké je cca potřebné rozlišení objektů pro klasifikaci - cca v jakém rozsahu vzdáleností budou detekovatelní ptáci/drony/letadla, ... + někde by se hodil i rozbor/test světelných podmínek (možná to může být až u testování algoritmů) - jakou část dne bude možné sledovat (infra přísvit asi nehrozí) 
+
+- kap. 5 - napájení 
+
+- kap. 5 - návrh krabičky, schéma, rozměry, foto... + v krabičce by měl být závit pro připevnění na stativ?
+
+- kap. 5 - blokové schéma zařízení Obr. 5.2 a slovní popis jako samostatnou podkapitolu + fotky celého zařízení, i vnitřku 
+
+- kap. 6.1 - popsat převzatý dataset z [1] - počet snímků, videa, zastoupení kategorií, rozlišení, povaha/různorodost datsetu - můžete udělat pro představu malou koláž 
+
+- kap. 6.1 - stejně tak více popsat další datasety + co jste posbíral a anotoval sám, mimo jiné aby bylo jasné, kolik práce jste musel udělat sám 
+
+- kap. 6.1 - stručný popis programu roboflow - co umí + odkaz na zdroj
+
+- kap. 6.1 - může být ukázka z programu roboflow s anotací na nějakém snímku z datasetu 
+
+- kap. 6.2 - počet snímků (trénování,validace,testování) je menší než v kap.6.1 - jak jste je vybral? a jak jsou nyní zastoupeny v rámci tříd
+
+- kap. 6.2 - ještě je možné překlopení (flip) v obou osách, výřez 
+
+- str. 29 - "rôzne od vylidačných"
+
+- str. 38 - všechny odkazy by měly být použity někde v textu - odkaz [8] není použit 
+
+- jazykovou korekturu si netroufnu dělat, ale oponent může být teoreticky i Slovák, upozornila jsem jen na zřejmé překlepy, obecně je pak dobré nechat DP přečíst někomu jinému (i laikovy) 

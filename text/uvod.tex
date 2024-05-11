@@ -2,7 +2,11 @@
 \phantomsection
 \addcontentsline{toc}{chapter}{Úvod}
 
-V súčasnej dobe hrá počítačové videnie dôležitú rolu v mnohých aplikáciách. Táto práca sa zameriava na jeho využitie pri návrhu systému schopného detekovať, trasovať a klasifikovať objekty lietajúce na oblohe. Cieľom je vytvoriť robustný systém schopný nasadenia v reálnych nepriaznivých podmienkach so schopnosťou detekcie a klasifikácie rôznych typov živých aj umelo vytvorených lietajúcich objektov. Je požadovaná možnosť použitia rôznych prístupov spracovania vstupných dát a porovnanie ich výkonu a presnosti.
+V súčasnej dobe hrá počítačové videnie dôležitú rolu v mnohých aplikáciách. Táto práca sa zameriava na jeho využitie pri návrhu systému schopného detekovať, trasovať a klasifikovať objekty lietajúce na oblohe. Cieľom je vytvoriť robustný systém schopný nasadenia v reálnych nepriaznivých podmienkach so schopnosťou detekcie a klasifikácie rôznych typov živých aj umelo vytvorených lietajúcich objektov. Je požadovaná možnosť použitia rôznych prístupov spracovania vstupných dát a porovnanie ich výkonu a presnosti. Pri návrhu systému je nutné zvážiť obmedzený výkon výpočtovej jednotky systému a voliť jednoduchšie.
+
+Systém bude získavať obrazové dáta pomocou statickej kamery, sledujúcej časť oblohy. Časť obrazu môže obsahovať aj horizont. Kamera v bude reálnom čase zachytávať sekvenciu snímkov. Na nich systém musí rozpoznať pohybuhúce sa objekty na pozadí ktoré sa môže s postupom času tiež pohybovať či meniť, či už kvôli pohybujúcim oblakom, alebo zmene svetelných podmienok.
+
+Detekované objekty budú klasifikované do piatich tried: vták, hmyz, lietadlo, helikoptéra, dron. Kvôli rôznym farbám rôznych inštancii týchto objektov, môžu mať objekty vyšší ale aj nižší jas ako pozadie.
 
 Táto práca bude postupovať od teoretických základov do konkrétneho návrhu a implementácie popísaného systému počítačového videnia.
 
