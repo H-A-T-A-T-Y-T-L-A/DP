@@ -191,7 +191,7 @@
             \[\theta = atan2(I_x, I_y)\]
         \end{minipage}
         
-        \item Ku zníženiu redundancie detekovaných hrán sa použije algoritmus \emph{non maxima suppression} (potlačenie nemaximálnej hodnoty). Použitím tohoto algoritmu dôjde k zúženiu hrán, pričom sa ponechajú len tie časti hrán, ktorých magnitúda je väčšia ako v ich okolí.
+        \item Ku zníženiu redundancie detekovaných hrán sa použije algoritmus \ac{NMS}. Použitím tohoto algoritmu dôjde k zúženiu hrán, pričom sa ponechajú len tie časti hrán, ktorých magnitúda je väčšia ako v ich okolí.
         
         \item Dvojitým prahovaním sa v obraze hrán nájdu tri úrovne:
             \begin{itemize}
@@ -251,7 +251,7 @@
             \caption{Detekcia horizontu pomocou Houghovej transformácie}
         \end{figure}
 
-    %\subsection{Detekcia objektov z kontúr}
+    % \subsection{Detekcia objektov z kontúr}
 
 \section{Detekcia pohybu}
 
@@ -301,11 +301,9 @@
             \tikzstyle{line} = [draw, -latex']
 
             % Nodes
-            \node [block] (start) {prejdi na ďalší snímok
-            
-            i \(\leftarrow\) i + 1};
-            \node [block, below=of start] (calc_d1) {výpočet $D_1(x,y)$ medzi $I_i(x,y)$ a $I_{i-1}(x,y)$};
-            \node [draw, diamond, aspect=4, below=of calc_d1] (check_d1) {vykazuje $(D_1(x,y)$ významný pohyb?};
+            \node [block] (start) {prejdi na ďalší snímok i \(\leftarrow\) i + 1};
+            \node [block, below=of start] (calc_d1) {vypočítaj $D_1(x,y)$ medzi $I_i(x,y)$ a $I_{i-1}(x,y)$};
+            \node [draw, diamond, aspect=4, below=of calc_d1] (check_d1) {vykazuje $D_1(x,y)$ významný pohyb?};
             \node [block, below=of check_d1] (calc_d2) {vypočítaj $D_2(x,y)$ medzi $I_i(x,y)$ a $B_i(x,y)$};
             \node [draw, diamond, aspect=4, below=of calc_d2] (check_d2) {vykazuje $D_2(x,y)$ významný pohyb?};
             \node [block, below=of check_d2] (calc_b) {vypočítaj $B_{i+1}(x,y)$};
@@ -377,9 +375,9 @@
         \begin{figure}[!ht]
             \centering
             \begin{minipage}[b]{0.45\textwidth}
-                \begin{equation}
+                \[
                     B_{priemer} = \frac{1}{N} \cdot \sum_{(x,y) \in \Omega} f(x,y)
-                \end{equation}
+                \]
             \end{minipage}
             \begin{minipage}[b]{0.45\textwidth}
                 \begin{equation}
@@ -387,43 +385,43 @@
                 \end{equation}
             \end{minipage}
             \begin{minipage}[b]{0.45\textwidth}
-                \begin{equation}
+                \[
                     B_{dif. pozadia} = B_{priemer(\Omega)} - B_{priemer(\Phi)} 
-                \end{equation}
+                \]
             \end{minipage}
             \begin{minipage}[b]{0.45\textwidth}
-                \begin{equation}
+                \[
                     B_{min} = min(f(x,y))
-                \end{equation}
+                \]
             \end{minipage}
             \begin{minipage}[b]{0.45\textwidth}
-                \begin{equation}
+                \[
                     H_{priemer} = \frac{1}{N} \cdot \sum_{q=1}^{N} q \cdot h(q)
-                \end{equation}
+                \]
             \end{minipage}
             \begin{minipage}[b]{0.5\textwidth}
-                \begin{equation}
+                \[
                     H_{kontrast} = \frac{1}{N} \cdot \sum_{q=1}^{N} (q \cdot h(q) - H_{priemer})^2
-                \end{equation}
+                \]
             \end{minipage}
             \begin{minipage}[b]{0.45\textwidth}
-                \begin{equation}
+                \[
                     H_{energia} = \frac{1}{N} \cdot \sum_{q=1}^{N} h(q)^2
-                \end{equation}
+                \]
             \end{minipage}
             \begin{minipage}[b]{0.45\textwidth}
-                \begin{equation}
+                \[
                     H_{entropia} = \frac{1}{N} \cdot \sum_{q=1}^{N} h(q) \cdot log_2h(q)
-                \end{equation}
+                \]
             \end{minipage}
         \end{figure}
 
         Z geometrických momentov, ktorých hodnoty sú závislé na afinných transformáciách (translácia, rotácia a úprava mierky) je možné úpravou získať príznaky na transformácii nezávislé. \cite{Erbo2017} Všeobecne je moment rádu (p,q) segmentu l(x,y) daný:
         \begin{figure}[!ht]
             \begin{minipage}[b]{0.45\textwidth}
-                \begin{equation}
+                \[
                     m_{pq} = \int_{-\infty}^\infty\int_{-\infty}^\infty x^p y^q l(x,y) dx dy
-                \end{equation}
+                \]
                 \centering
                 (definícia)
             \end{minipage}
@@ -481,43 +479,119 @@
                 \item Pravdepodobnosť zaradenia do danej triedy. Tá je získaná použitím výstupnej aktivačnej vrstvy typu \emph{softmax}, ktorá spôsobí že každý z výstupov má hodnotu od 0 do 1 a súčet všetkých výstupov je 1.
             \end{itemize}
         \end{itemize}
-        
 
 \chapter{Detekcia a klasifikácia v jednom kroku}
+    Existuje niekoľko metód schopných detekcie aj~klasifikácie pomocou jediného modelu. Vďaka tomu je možné vynechať krok detekcie a~získať priamo klasifikované orámovania, čím sa~systém detekcie zjednoduší. Je však nutné porovnať výkon a~kvalitu detekcie a~klasifikácie v~jednom kroku s~prístupom so~samostatnou detekciou a~klasifikáciou.
 
-    % \section{R-CNN}
+    \section{R-CNN}
 
-    %     \ac{R-CNN} sú skupina modelov strojového učenia zaločená na \ac{CNN}. Ich cieľom je nájdenie a~klasifikovanie objektov v obraze. Ich výstupom je množina rámčekov ohraničujúcich objekty a im pridelené triedy.
+        \ac{R-CNN} sú skupina modelov strojového učenia zaločená na \ac{CNN}. Ich cieľom je nájdenie a~klasifikovanie objektov v obraze. Ich výstupom je množina rámčekov ohraničujúcich objekty a im pridelené triedy.
 
-    %     \ac{R-CNN} pracujú v niekoľkých etapách:
-    %     \begin{enumerate}
-    %         \item \textbf{Selektívne vyhľadávanie} - vstupný obraz je spracovaný a sú extrahované \ac{RoI}, teda orámované oblasti obrazu, ktoré by mohli obsahovať objekty alebo ich časti. Počet takto navrhovaných oblastí môže dosahovať niekoľko tisíc.
-    %         \item \textbf{Extrakcia príznakov} - každý \ac{RoI} je predložený ako vstup pre naučenú \ac{CNN}, ktorá vyprodukuje príznakový vektor pre každý \ac{RoI}.
-    %         \item \textbf{Klasifikácia} - pomocou skupiny modelov \ac{SVM} je podľa príznakov extrahovaných \ac{CNN}, klasifikovaný každý \ac{RoI} do jednej z určených tried alebo ako pozadie - teda nepatriaci do žiadnej triedy.
-    %         \item \textbf{Regresia ohraničení} - konečný krok, zvyšujúci presnosť orámovania objektov. Používa sa pri ňom naučený model nezávislý na mierke nazývaný \emph{bounding box regressor}. Jeho výstup je štvorrozmerný, skladá sa z polohy a rozmerov ohraničujúceho obdĺžnika.
-    %     \end{enumerate}
+        \ac{R-CNN} pracujú v niekoľkých etapách:
+        \begin{enumerate}
+            \item \textbf{Selektívne vyhľadávanie} - vstupný obraz je spracovaný a sú extrahované \ac{RoI}, teda orámované oblasti obrazu, ktoré by mohli obsahovať objekty alebo ich časti. Počet takto navrhovaných oblastí môže dosahovať niekoľko tisíc.
+            \item \textbf{Extrakcia príznakov} - každý \ac{RoI} je predložený ako vstup pre naučenú \ac{CNN}, ktorá vyprodukuje príznakový vektor pre každý \ac{RoI}.
+            \item \textbf{Klasifikácia} - pomocou skupiny modelov \ac{SVM} je podľa príznakov extrahovaných \ac{CNN}, klasifikovaný každý \ac{RoI} do jednej z určených tried alebo ako pozadie - teda nepatriaci do žiadnej triedy.
+            \item \textbf{Regresia ohraničení} - konečný krok, zvyšujúci presnosť orámovania objektov. Používa sa pri ňom naučený model nezávislý na mierke nazývaný \emph{bounding box regressor}. Jeho výstup je štvorrozmerný, skladá sa z polohy a rozmerov ohraničujúceho obdĺžnika.
+        \end{enumerate}
 
-    %     \ac{R-CNN} sú efektívne, no náročné na výpočtový výkon. Z toho dôvodu boli vyvinuté rýchlejšie varianty \emph{Fast R-CNN} a \emph{Faster R-CNN}.
+        \ac{R-CNN} sú efektívne, no náročné na výpočtový výkon. Z toho dôvodu boli vyvinuté rýchlejšie varianty \emph{Fast R-CNN} a \emph{Faster R-CNN}.
 
-    %     \emph{Fast R-CNN} aplikuje \ac{CNN} na celý vstupný obraz a extrahuje z neho mapu príznakov. Až na výslednú mapu aplikuje takzvaný \ac{RoI} \emph{pooling}, ktorý extrahuje príznaky pre každý \ac{RoI}, pomocou okna pevnej veľkosti. Zvyšok modelu pracuje podobne ako \ac{R-CNN}, s využitím plne prepojenej siete na klasifikáciu a generovanie orámovaní.
+        \emph{Fast R-CNN} aplikuje \ac{CNN} na celý vstupný obraz a extrahuje z neho mapu príznakov. Až na výslednú mapu aplikuje takzvaný \ac{RoI} \emph{pooling}, ktorý extrahuje príznaky pre každý \ac{RoI}, pomocou okna pevnej veľkosti. Zvyšok modelu pracuje podobne ako \ac{R-CNN}, s využitím plne prepojenej siete na klasifikáciu a generovanie orámovaní.
 
-    %     \emph{Faster R-CNN} nadväzuje na \emph{Fast R-CNN} nahradením selektívneho vyhľadávania modelom typu \ac{RPN}. Vstupný obraz prechádza predučenou \ac{CNN}, sú extrahované príznaky. \ac{RPN} využije nájdené príznaky aby určila, kde sa nachádzajú potenciálne objekty v obraze. V konečnom kroku sú klasifikované navrhnuté ohraničené oblasti podľa príznakov extrahovaných v predošlom kroku. \emph{Faster R-CNN} je dostatočne rýchla na použitie v reálnom čase.
+        \emph{Faster R-CNN} nadväzuje na \emph{Fast R-CNN} nahradením selektívneho vyhľadávania modelom typu \ac{RPN}. Vstupný obraz prechádza predučenou \ac{CNN}, sú extrahované príznaky. \ac{RPN} využije nájdené príznaky aby určila, kde sa nachádzajú potenciálne objekty v obraze. V konečnom kroku sú klasifikované navrhnuté ohraničené oblasti podľa príznakov extrahovaných v predošlom kroku. \emph{Faster R-CNN} je dostatočne rýchla na použitie v reálnom čase.
 
     \section{YOLO}
-
-        \ac{YOLO} je populárny algoritmus detekcie, ktorý na rozdiel od \ac{R-CNN} rozdeľuje obraz do mriežky a postupne aplikuje klasifikátor. Postupuje nasledovne:
+        \ac{YOLO} je populárny algoritmus detekcie, ktorý na rozdiel od \ac{R-CNN} rozdeľuje obraz do mriežky a postupne aplikuje klasifikátor, eliminujúc krok návrhu regiónov záujmu. Zameriava sa teda na rýchlosť a jednoduchosť. Postupuje nasledovne:
 
         \begin{enumerate}
-            \item Vstuný obraz je rozdelený na mriežku \(S \times S\), ktorej veľkosť závisí na verzii \ac{YOLO}.
-            \item V každej bunke mriežky je predikovaný určitý počet ohraničených oblastí a im priradené skóre dôveryhodnosti. Tie značia úroveň istoty, že oblasť obsahuje objekt a že dané ohraničenie je správne.
-            \item Je použitých viacero klasifikátorov. \ac{YOLO} predikuje viacero oblastí za každú bunku. Počas trénovania je jednému z prediktorov udelená zodpovednosť\linebreak za~predikovanie daného objekto podľa toho, ktorý z nich dosahuje najväčší \ac{IoU}.
+            \item Vstuný obraz je rozdelený na mriežku $S \times S$, ktorej veľkosť závisí na verzii \ac{YOLO}.
+            \item V každej bunke mriežky je predikovaný určitý počet ohraničených oblastí a im priradené skóre dôveryhodnosti. Tie značia úroveň istoty, že oblasť obsahuje objekt a že dané ohraničenie je správne. Oblasti sú popísané štyrmi číslami, dve súradnice stredného bodu oblasti a dva rozmery ohraničujúceho obdĺžnika.
+            \item Je použitých viacero klasifikátorov. Počas trénovania je jednému z prediktorov udelená zodpovednosť za~predikovanie daného objekto podľa toho, ktorý z nich dosahuje najväčší \ac{IoU}. Výstupom klasifikácie v \ac{YOLO} je vektor predikcii pravdepodobností že objekt obsiahnutý v danom ohraničení patrí do každej triedy. Celkový výstup YOLOv8 je tenzor obsahujúci zoznam všetkých klasifikovaných oblastí
             \item Každá bunka predikuje rozdelenie pravdepodobnosti všetkých tried.
         \end{enumerate}
 
         Hlavnou výhodou \ac{YOLO} je rýchlosť. Všeobecne pracuje rýchlejšie a s menším požadovaným výpočtovým výkonom. Na druhú stranu má nevýhody spôsobené obmedzením veľkosti orámovaných oblastí. Presnosť \ac{YOLO} býva nižšia pri primalých objektoch, pre použitia vyžadujúce vyššiu presnosť sa môže javiť ako výhodnejšie použiť iné modely.
 
+        \subsection{Non-Maximum Suppression}
+            Výstup zo siete YOLOv8 je vo formáte zoznamu 8400 potenciálnych orámovaní, ktoré sú tvorené súradnicami stredového bodu, rozmermi orámovania a ohodnotením dôveryhdnosti že orámovanie obsahuje objekt pre každú triedu. Typickým problémom detekčných modelov je že ich výstup obsahuje niekoľko prekrývajúcich sa orámovaní patriacich rovnakému objektu. Algoritmus \ac{NMS} pre odstránenie redundantných orámovaní postupuje podobne ako pri jeho aplikovaní na obraz hrán. Výsledkom je nájdenie najlepšieho orámovania pre každý objekt v obraze. Pred jeho použitím je nutné určiť dva parametre, Prvým je prah \ac{IoU} medzi orámovaniami $\tau$, druhým prah dôveryhodnosti$T$. \ac{NMS} začne prácu s množinou orámovaní $B$ ohodnotených úrovňou dôveryhdnosti $S$.
+
+            \begin{figure}[H]
+                \centering
+                \begin{tikzpicture} [node distance=7cm, auto]
+                    \tikzstyle{line} = [draw, -latex']
+                    \node (image1) {\includegraphics[width=.3\textwidth]{obrazky/nms/before.png}};
+                    \node (image2) [right of=image1] {\includegraphics[width=.3\textwidth]{obrazky/nms/after.png}};
+                    \path [line] (image1) -- (image2);
+                \end{tikzpicture}
+                \caption{Vstup a výsledok \ac{NMS}}
+            \end{figure}
+
+            \begin{figure}[H]
+                \centering
+                \begin{tikzpicture}[node distance=.3cm, auto]
+
+                    % Define block styles
+                    \tikzstyle{block} = [rectangle, draw, fill=white!20, text width=18em, text centered, sharp corners, minimum height=4em]
+                    \tikzstyle{line} = [draw, -latex']
+
+                    % Nodes
+                    \node [draw, rectangle] (start) {začiatok};
+                    \node [block, below=of start] (prepare) {Priprav prázdnu množinu výsledných filtrovaných orámovaní $F = \emptyset$};
+
+                    \node [block, below=of prepare] (filter_conf) {Z množiny orámovní $B$ odstráň orámovania s prinískou dôveryhodnosťou
+                    \\$B \leftarrow \{b \in B | S(b) \geq T\}$
+                    };
+
+                    \node [block, below=of filter_conf] (order_conf) {Zoraď orámovania ostávajúce v množine $B$};
+
+                    \node [draw, diamond, aspect=4, below=of order_conf] (check_remaining) {\parbox{15em}{\centering Obsahuje $B$ ešte orámovania? \\$B \neq \emptyset$}};
+
+                    \node [block, below=of check_remaining] (select_b) {Vyber prvé orámovanie $b$ z množiny $B$ s najvyššou dôveryhodnosťou $S(b)$};
+
+                    \node [block, below=of select_b] (add_b) {Vlož $b$ do množiny $F$ a odober ho z množiny $B$:
+                    \\$F \leftarrow F  \bigcup  \{b\}$ 
+                    \\$B \leftarrow B - \{b\}$};
+
+                    \node [draw, diamond, aspect=4, below=of add_b] (check_iteration) {\parbox{15em}{\centering Boli skontrolované všetky \\zostávajúce orámovania $r$ v $B$?}};
+
+                    \node [draw, diamond, aspect=4, below=of check_iteration] (check_iou) {\parbox{15em}{\centering Patrí toto ohraničenie rovnakému objektu poďla IoU? \\$IoU(b,r) \geq \tau$}};
+
+                    \node [block, below=of check_iou] (remove_r) {Odober $r$ z množiny $B$:
+                    \\$B \leftarrow B - \{b\}$};
+
+                    \node [draw, rectangle, right=of select_b] (end) {koniec};
+
+                    % Arrows
+                    \path [line] (start) -- (prepare);
+                    \path [line] (prepare) -- (filter_conf);
+                    \path [line] (filter_conf) -- (order_conf);
+                    \path [line] (order_conf) -- (check_remaining);
+                    \path [line] (check_remaining) -- node [near start] {áno} (select_b);
+                    \path [line] (check_remaining.350) -- node [near start] {nie} (end);
+                    \path [line] (select_b) -- (add_b);
+                    \path [line] (add_b) -- (check_iteration);
+                    \path [line] (check_iteration) -- node [near start] {nie} (check_iou);
+                    \path [line] (check_iteration.175) -- node [near start] {áno} (check_remaining.185);
+                    \path [line] (check_iou) -- node [near start] {áno} (remove_r);
+                    \path [line] (check_iou.165) -- node [near start] {nie} (check_iteration.190);
+                    \path [line] (remove_r.0) -- ++(3.5,0) -- ++(0,4) -- (check_iteration.0);
+                \end{tikzpicture}
+                \caption{Algoritmus Non-Maximum Suppression pre orámovanie objektov}
+            \end{figure}
+
+\chapter{Ukladanie naučených modelov}
+    Neurónové siete využívané v tejto práci je nutné po ich naučení uložiť, tak aby ich dokázala aplikácia systému v zariadení načítať a použiť. K tomu je dostupných niekoľko rôznych formátov.
+
+    \section{ONNX}
+        ONNX je otvorený formát vybudovaný na reprezentáciu rôznych modelov strojového učenia. Definuje stavebné bloky modelov strojového a hlbokého učenia so spoločným formátom súborov dovoľúcim vývojárom používať uložený model s rôznymi nástrojmi a programami. Hlavnou výhodou je interoperabilita umožňujúca vytváranie modelov, ich testovanie a používanie v nezávyslích aplikáciách. Ak je pre aplikáciu známy formát vstupu a výstupu, sú modely uložené v ONNX rovnocenné z hľadiska ich ovládania, vďaka čomu je implementácia využitia modelov rovnakého druhu zjednodušená.
+
+    \section{Keras}
+        Knižnica \emph{Keras} patriaca pod knižnicu \emph{Tensorflow}, umožňujúca prácu so strojovým učením, je jednou s často používaných knižníc pre \emph{Python} s týmto zameraním. Je v nej implementovaný vlastný formát súborov na ukladanie modelov, z ktorých je možné jednoducho načítať model postavený z komponentov z knižnice \emph{Keras}. Vďaka existencii špecializovaných verzii knižníc \emph{Tensorflow} na využitie s procesorom aj GPU, Je možné nainštalovaním správnej verzie knižnice rozhodnúť o využití výpočtového výkonu počítača.
+
 \chapter{Vyhodnotenie kvality detekcie}
-    K porovnaniu a vyhodnoteniu kvality výsledkov rôznych prístupov 
+    K porovnaniu a vyhodnoteniu kvality výsledkov rôznych prístupov je nutné zhotoviť anotovaný dataset so snímkami zachytenými za reálnych podmienok kamerou priamo na zariadení. Použitím porovnávaných prístupov na snímky v tomto datasete a ich následným porovnaním s anotáciou je možné vypočítať metriky popisujúce ich kvalitu detekcie a klasifikácie.
+
     \section{Kvalita orámovania}
         Často používanou metrikou presnosti orámovania je takzvané \ac{IoU}. To je získané porovnaním orámovania určeného pri anotácii a orámovania predikovaného detektorom.
 
@@ -546,7 +620,72 @@
             Matica zámien (confusion matrix) je prehľadné zobrazenie výsledkov klasifikácie určitej množiny objektov. Vykresľuje sa~ako~tabuľka rozdeľujúca počet vzorkov z~každej skutočnej triedy podľa ich~predikovanej triedy. Ak~sú skutočné a~predikované triedy v~tabuľke v~rovnakom poradí, na~diagonále sa~nachádzajú počty správne zaradených, mimo diagonály zas~nesprávne zaradených inštancií.
 
         \subsection{Metriky vychádzajúce z matice zámien}
-        ...
+            Elementy matice zámien je možné roztriediť podľa správnosti ich klasifikácie do konkrétnej triedy. Hodnoty metrík klasifikácie sú vypočítavané vzhľadom na konkrétnu triedu alebo pre celkovú klasifikáciu.
+
+            Riadky matice \ref{fig:example_confusion_matrix} reprezentujú skutočnosť, stĺpce predikciu. P (pozitívne) zaradenie reprezentuje prvky zaradené do triedy pre ktorú chceme počítať metriky klasifikácie. N (negatívne) značí ostatné triedy.
+
+            \begin{figure}[!h]
+                \begin{minipage}[b]{0.38\textwidth}
+                    \begin{tabular}{c|c|c|c|}
+                          & N  &  P & N  \\
+                        \hline
+                        N & TN & FP & TN \\
+                        \hline
+                        P & FN & TP & FN \\
+                        \hline
+                        N & TN & FP & TN \\
+                        \hline
+                    \end{tabular}
+                    \centering
+                    \caption{rozdelenie prvkov matice}
+                    \label{fig:example_confusion_matrix}
+                \end{minipage}
+                \begin{minipage}[b]{0.6\textwidth}
+                    \begin{itemize}
+                        \item \textbf{TP} (true positive) sú inštancie zaradené správne do triedy ktorej klasifikáciu chceme ohodnotiť.
+                        \item \textbf{TN} (true negative) sú zaradené správne do iných tried.
+                        \item \textbf{FP} (false positive) sú inštancie nesprávne označené za sledovanú triedu.
+                        \item \textbf{FN} (false negative) sú naopak označené ako sledovaná trieda, no správne patria do jednej z ostatných tried.
+                    \end{itemize}
+                \end{minipage}
+            \end{figure}
+
+            \begin{itemize}
+                \item \textbf{Presnosť (precision)} vyjadruje ako často, keď model predpovedá určitú triedu, predpovedá ju správne.
+                \begin{equation}
+                    Precision = \frac{TP}{TP + FP}
+                \end{equation}
+                \item Ako často model správne vyhodnotí objekt ako patriaci do danej triedy v pomere ku skutočnému počtu objektov z tej triedy, je \textbf{Úplnosť (recall)}. Nízke skóre úplnosti značí že model primálo často predpovedá danú triedu.
+                \begin{equation}
+                    Recall = \frac{TP}{TP + FN}
+                \end{equation}
+                \item \textbf{F1 skóre} je kombináciou presnosti a úplnosti. Využíva sa v prípade hľadania rovnováhy medzi presnosťou a úplnosťou.
+                \begin{equation}
+                    F1 = \frac{2 \times Precision \times Recall}{Precision + Recall}
+                \end{equation}
+                \item \textbf{Správnosť (accuracy)} je pomer spočtu právne klasifikovaných inštancii ku počtu všetkých inštancii.
+                \begin{equation}
+                    Accuracy = \frac{TP + TN}{P + N}
+                \end{equation}
+                \item \textbf{Citlivosť (sensitivity)} znamená ako často model správne vyhodnocuje objekty danej triedy ako patriace do tej triedy.
+                \begin{equation}
+                    Sensitivity = \frac{TP}{P}
+                \end{equation}
+                \item \textbf{Špecificita (specificity)} na druhú stranu vyjadruje ako často sú správne vyhodnotené prvky nepatriace do danej triedy.
+                \begin{equation}
+                    Specificity = \frac{TN}{N}
+                \end{equation}
+            \end{itemize}
+
+    \section{Výkon detekcie}
+        \subsection{Snímková frekvencia}
+            Dôležitým parametrom systému detekcie je frekvencia s akou je schopný získavať a spracovávať snímky. V prípade že je snímková frekvencia príliš nízka, je možné že príliž rýchlo sa pohybujúce objekty nestrávia v zábere kamery dostatočný čas na to aby boli zachytené ani na jednom snímku. Jedny z hlavných faktorov obmedzujúcich snímkovú frekvenciu sú:
+            \begin{itemize}
+                \item Maximálna snímkovacia frekvencia kamery pri danom rozlíšení.
+                \item Výpočtový výkon zariadenia na ktorom je systém spustený.
+                \item Zložitosť metód použitých v systéme.
+            \end{itemize}
+        \subsection{Oneskorenie}
 
 \chapter{Návrh usporiadania hardvérových komponentov}
 
@@ -857,7 +996,7 @@ object BackgroundModel
                 \end{itemize}
                 \item \textbf{Dynamický model pozadia:} Generuje postupne sa~aktualizujúci model pozadia, s~ktorým potom vypočíta absolútnu hodnotu rozdielu s~aktuálnou snímkou. Ten je potom prahovaný nastavenou hodnotou, čím vzniká binárny obraz, v~ktorom je možné detegovať pohybujúce sa~objekty. Nastaviť je v~tomto module možný prah, ktorý keď prekročí úroveň pohybu v~obraze, prestane sa~aktualizovať model pozadia. Nastaviteľné prahy sú dva, prah dvoch po~sebe nasledujúcich snímkov a~prah medzi snímkou a~modelom pozadia. Ich úroveň je určená relatívne k~rozlíšeniu obrazu a~normalizovaná na~maximálnu úroveň jasu jedného pixelu, čím je získaná nezávislosť na~rozlíšení a~číselnej reprezentácii obrazu. Ďalšie nastavenia zahŕňajú časovú konštantu zmeny pozadia, spolu s~maximálnou zmenou jasu každého pixelu za~jednu iteráciu. 
                 \item \textbf{Generátor orámovaní z binárneho obrazu:} Vyhľadáva súvislé oblasti v~binárnom obraze a~vytvára obdĺžnikové orámovania. Pred vyhľadávaním najprv vykoná morfologické zatvorenie, s~cieľom spojiť blízke oblasti ktoré pravdepodobne patria jednému objektu. Tvar jadra zatvorenia je možné nastaviť. Oblasti s menším počtom pixelov ako nastavený prah sú ignorované.
-                \item \textbf{Tensorflow klasifikácia:} Načíta uložený naučený klasifikačný model vo~formáte keras. Tomuto modulu je potrebné nastaviť cestu k~súboru s~uloženým modelom. Načítaný model je potom aplikovaný na~vystrihnuté oblasti podľa orámovaní z~pôvodného farebného obrazu. Očakávaný je výstup typu one-hot, teda každý výstup určuje predpokladanú pravdepodobnosť zaradenia objektu v~orámovaní do~triedy asociovanej s~daným výstupom. Výsledná klasifikácia je zvolená ako~trieda s~najvyššou pravdepodobnosťou, ak~presahuje určený prah. Modely pre~tento modul boli vytvorené v~prostredí matlab deep network designer, naučené pomocou transfer learning, a~exportované do~formátu pre tensorflow keras. Boli použité predučené konvolučné siete Resnet50, Squeezenet a~Googlenet.
+                \item \textbf{Tensorflow klasifikácia:} Načíta uložený naučený klasifikačný model vo~formáte keras. Vďaka tomu je možné použiť na výpočty GPU na zariadeniach kde je dostupná, nainštalovaním GPU verzie knižnice tensorflow. Tomuto modulu je potrebné nastaviť cestu k~súboru s~uloženým modelom. Načítaný model je potom aplikovaný na~vystrihnuté oblasti podľa orámovaní z~pôvodného farebného obrazu. Očakávaný je výstup typu one-hot, teda každý výstup určuje predpokladanú pravdepodobnosť zaradenia objektu v~orámovaní do~triedy asociovanej s~daným výstupom. Výsledná klasifikácia je zvolená ako~trieda s~najvyššou pravdepodobnosťou, ak~presahuje určený prah. Modely pre~tento modul boli vytvorené v~prostredí matlab deep network designer, naučené pomocou transfer learning, a~exportované do~formátu pre tensorflow keras. Boli použité predučené konvolučné siete Resnet50, Squeezenet a~Googlenet.
                 \item \textbf{YOLO detektor:} Reprezentuje detekčnú sieť YOLOv8, schopnú detekcie objektov aj~ich klasifikácie v~jedinom kroku. Pri~použití tohto modulu teda nie~je nutné pridávať iné moduly detekcie. Výstup modelov YOLO je taktiež one-hot, výsledná klasifikácia funguje teda rovnako ako vo~vyššie popísanom module tensorflow klasifikátorov. Spolu s~klasifikáciou vracia tento modul aj~samotné orámovanie detegovaných objektov.
                 \item \textbf{Záznam videa:} Získané snímky je možné týmto modulom ukladať do súboru videa. Spolu s~videom sú ukladané orámovania detegovaných potenciálnych objektov. Ak~je dostupný modul generujúci orámovania, sú ukladané len snímky s~potenciálnym výskytom objektu.
             \end{itemize}

@@ -18,7 +18,8 @@ X- kap. 3.1 - zmínit, že pro klasifikaci na základě příznaků určených p
 
 - v kap. 3 a 4 nejsou odkazy na žádné zdroje - jsou to sice již všeobecně známé věci, ale přesto se hodí pár odkazů na nějakou základní literaturu
 
-- kap. 5 - rozdělit na dvě varianty: 1) kamera + PC, 2) přenosné zařízení a zmínit výhody a nevýhody každé - ad 1) není nutné žádné speciální nové zařízení, vyšší výkon, ad 2) kompaktní, přenositelné, samostatné zářízení, nezávislost, není třeba drátovat skrz okno apod.  
+- kap. 5 - rozdělit na dvě varianty: 1) kamera + PC, 2) přenosné zařízení a zmínit výhody a nevýhody každé 
+- ad 1) není nutné žádné speciální nové zařízení, vyšší výkon, ad 2) kompaktní, přenositelné, samostatné zářízení, nezávislost, není třeba drátovat skrz okno apod.  
 
 - kap. 5.2 - rozbor úlohy - jaký by byl vhodný úhel záběru, resp. jaká část oblohy bude zabrána navrženou kamerou, jaké je cca potřebné rozlišení objektů pro klasifikaci - cca v jakém rozsahu vzdáleností budou detekovatelní ptáci/drony/letadla, ... + někde by se hodil i rozbor/test světelných podmínek (možná to může být až u testování algoritmů) - jakou část dne bude možné sledovat (infra přísvit asi nehrozí) 
 
