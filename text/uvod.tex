@@ -2,27 +2,27 @@
 \phantomsection
 \addcontentsline{toc}{chapter}{Úvod}
 
-V súčasnej dobe hrá počítačové videnie dôležitú rolu v mnohých aplikáciách. Táto práca sa zameriava na jeho využitie pri návrhu systému schopného detekovať, trasovať a klasifikovať objekty lietajúce na oblohe. Cieľom je vytvoriť robustný systém schopný nasadenia v reálnych nepriaznivých podmienkach so schopnosťou detekcie a klasifikácie rôznych typov živých aj umelo vytvorených lietajúcich objektov. Je požadovaná možnosť použitia rôznych prístupov spracovania vstupných dát a porovnanie ich výkonu a presnosti. Pri návrhu systému je nutné zvážiť obmedzený výkon výpočtovej jednotky systému a voliť jednoduchšie.
+V~súčasnej dobe hrá počítačové videnie dôležitú rolu v~mnohých aplikáciách. Táto práca sa~zameriava na~jeho využitie pri~návrhu systému schopného detekovať, trasovať a~klasifikovať objekty lietajúce na~oblohe. Cieľom je vytvoriť robustný systém schopný nasadenia v~reálnych nepriaznivých podmienkach so~schopnosťou detekcie a~klasifikácie rôznych typov živých aj~umelo vytvorených lietajúcich objektov. Je požadovaná možnosť použitia rôznych prístupov spracovania vstupných dát a~porovnanie ich výkonu a~presnosti. Pri návrhu systému je nutné zvážiť obmedzený výkon výpočtovej jednotky systému a~voliť jednoduchšie.
 
-Systém bude získavať obrazové dáta pomocou statickej kamery, sledujúcej časť oblohy. Časť obrazu môže obsahovať aj horizont. Kamera v bude reálnom čase zachytávať sekvenciu snímkov. Na nich systém musí rozpoznať pohybuhúce sa objekty na pozadí ktoré sa môže s postupom času tiež pohybovať či meniť, či už kvôli pohybujúcim oblakom, alebo zmene svetelných podmienok.
+Systém bude získavať obrazové dáta pomocou statickej kamery sledujúcej časť oblohy. Časť obrazu môže obsahovať aj~horizont. Kamera v~bude reálnom čase zachytávať sekvenciu snímkov. Na~nich systém musí rozpoznať pohybujúce sa~objekty na~pozadí, ktoré sa~môže s~postupom času tiež pohybovať či~meniť, či~už~kvôli pohybujúcim oblakom alebo zmene svetelných podmienok.
 
-Detekované objekty budú klasifikované do piatich tried: vták, hmyz, lietadlo, helikoptéra, dron. Kvôli rôznym farbám rôznych inštancii týchto objektov, môžu mať objekty vyšší ale aj nižší jas ako pozadie.
+Detekované objekty budú klasifikované do~piatich tried: vták, hmyz, lietadlo, helikoptéra, dron. Kvôli rôznym farbám rôznych inštancii týchto objektov môžu mať objekty vyšší, ale~aj~nižší jas ako~pozadie.
 
-Táto práca bude postupovať od teoretických základov do konkrétneho návrhu a implementácie popísaného systému počítačového videnia.
+Táto práca bude postupovať od~teoretických základov do~konkrétneho návrhu a~implementácie popísaného systému počítačového videnia.
 
-Prvá kapitola sa venuje základným princípom detekcie objektov v obraze. Sú tu preskúmané existujúce metódy s porovnaním ich výhod a nevýhod, čo povedie k výberu vhodných metód pre navrhovaný systém.
+Prvá kapitola sa~venuje základným princípom detekcie objektov v~obraze. Sú tu~preskúmané existujúce metódy s~porovnaním ich~výhod a~nevýhod, čo~povedie k~výberu vhodných metód pre~navrhovaný systém.
 
-V druhej kapitole bude popísané získavanie charakteristík popisujúcich jednotlivé detekované objekty. Zohľadňujú sa tu aspekty ako tvar, farba a ďalšie príznaky, na ktorých záleží klasifikácia v ďalšom kroku.
+V~druhej kapitole bude popísané získavanie charakteristík popisujúcich jednotlivé detekované objekty. Zohľadňujú sa~tu~aspekty ako~tvar, farba a~ďalšie príznaky, na~ktorých záleží klasifikácia v~ďalšom kroku.
 
-Na základe popisu objektov bude v ďalšej kapitole popísaná problematika klasifikácie, teda rozpoznávania a zaradenia detekovaných objektov do definovaných tried podľa ich typu (lietadlo, helikoptéra, vták, hmyz, \dots).
+Na~základe popisu objektov bude v~ďalšej kapitole popísaná problematika klasifikácie, teda rozpoznávania a~zaradenia detekovaných objektov do~definovaných tried podľa ich~typu (lietadlo, helikoptéra, vták, hmyz, \dots).
 
-Štvrtá kapitola predstaví moderné metódy integrujúce detekciu a klasifikáciu do jedného procesu. Cieľom je optimalizácia efektivity a jednoduchosti architektúry systému.
+Štvrtá kapitola predstaví moderné metódy integrujúce detekciu a~klasifikáciu do~jedného procesu. Cieľom je optimalizácia efektivity a~jednoduchosti architektúry systému.
 
-Následne bude navrhnutý a odôvodnený výber hardvérových komponentov systému. Budú porovnané mikropočítače vhodné na aplikáciu v tejto práci a zvolené vhodné periférie na získavanie dát a užívateľské rozhranie.
+Následne bude navrhnutý a~odôvodnený výber hardvérových komponentov systému. Budú porovnané mikropočítače vhodné na~aplikáciu v~tejto práci a~zvolené vhodné periférie na~získavanie dát a~užívateľské rozhranie.
 
-Pre správne naučenie modelov použitých v systéme je nevyhnutné vytvoriť dostatočne rozsiahlu a správne navrhnutú anotovanú množinu dát, v prípade algoritmov počítačového videnia ide o databázu snímkov s označenými a triedenými objektami. Šiesta kapitola sa zameriava na tvorbu tejto databázy (datasetu) a jej validáciu.
+Pre správne naučenie modelov použitých v~systéme je nevyhnutné vytvoriť dostatočne rozsiahlu a~správne navrhnutú anotovanú množinu dát, v~prípade algoritmov počítačového videnia ide o~databázu snímkov s~označenými a~triedenými objektami. Šiesta kapitola sa~zameriava na~tvorbu tejto databázy (datasetu) a~jej~validáciu.
 
-V poslednej kapitole bude zdokumentovaný návrh softvéru pre systém detekcie, klasifikácie a trasovania objektov. V tejto kapitole bude priblížená štruktúra aplikácie, nástroje použité pri vývoji a návrh jej užívateľského rozhrania.
+V~poslednej kapitole bude zdokumentovaný návrh softvéru pre~systém detekcie, klasifikácie a~trasovania objektov. V~tejto kapitole bude priblížená štruktúra aplikácie, nástroje použité pri~vývoji a~návrh jej~užívateľského rozhrania.
 
 % Úvod studentské práce, např\,\dots
 % 
